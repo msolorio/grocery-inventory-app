@@ -1,0 +1,22 @@
+{
+  "username": "feedme",
+  "password": "1234",
+  "inventory": [
+    {
+      "itemName": "spinach",
+      "quantity": 2,
+      "target": 2,
+      "unit": "tub",
+      "incrementor": 0.25,
+      "location": "Sprouts"
+    },
+    {
+      "itemName": "bananas",
+      "quantity": 4,
+      "target": 10,
+      "unit": "banana",
+      "incrementor": 1,
+      "location": "Costco"
+    }
+  ]
+}
