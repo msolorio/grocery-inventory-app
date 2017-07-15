@@ -16,7 +16,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "start": "./node_modules/.bin/nodemon server.js"
+    "start": "node server.js",
+    "start:dev": "./node_modules/.bin/nodemon server.js"
   },
   "author": "",
   "license": "ISC"
