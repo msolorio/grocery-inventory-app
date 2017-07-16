@@ -7,8 +7,20 @@ app.use('/css', express.static('public/css'));
 app.use('/js', express.static('public/js'));
 
 app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/index.html`);
-})
+  res.sendFile(`${__dirname}/inventory.html`);
+});
+
+app.get('/addItem', (req, res) => {
+  res.sendFile(`${__dirname}/addItem.html`);
+});
+
+app.get('/lists', (req, res) => {
+  res.sendFile(`${__dirname}/lists.html`);
+});
+
+app.get('/inventory', (req, res) => {
+  res.redirect('/');
+});
 
 let server;
 
