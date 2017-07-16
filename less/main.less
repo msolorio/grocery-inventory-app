@@ -1,0 +1,108 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: arial, sans-serif;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/***********************************************
+GRID
+/***********************************************/
+.container {
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.row {
+  margin-right: -10px;
+  margin-left: -10px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.col {
+  float: left;
+  width: 100%;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+/************************************************
+UTILITY CLASSES
+/************************************************/
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/************************************************
+INVENTORY PAGE
+/************************************************/
+
+/************************************************
+ITEM CARD
+/************************************************/
+.itemCard {
+
+  .card {
+    position: relative;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #eee;
+  }
+
+  .remove {
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+  }
+
+  .itemName {
+    text-align: center;
+    margin: 0;
+  }
+
+  .image {
+    display: block;
+    padding: 20px 0;
+    margin: 0 auto;
+    width: 150px;
+  }
+
+  .amountChanger {
+    text-align: center;
+  }
+
+  .decrementor,
+  .incrementor {
+    position: relative;
+    top: 6px;
+    cursor: pointer;
+    width: 25px;
+  }
+
+  .amountContainer {
+    padding: 0 10px;
+  }
+
+  .incrementor {
+    /**/
+  }
+}

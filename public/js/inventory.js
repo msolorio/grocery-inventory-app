@@ -3,29 +3,31 @@ console.log('in inventory js');
 var MOCK_ITEMS_DATA = {
   items: [
     {
-      "itemName": "spinach",
+      "itemName": "Spinach",
       "quantity": 2,
       "target": 2,
-      "unit": "tub",
+      "unit": "tubs",
       "incrementor": 0.25,
-      "location": "Sprouts"
+      "location": "Sprouts",
+      "image": "images/salad.svg"
     },
     {
-      "itemName": "bananas",
+      "itemName": "Bananas",
       "quantity": 4,
       "target": 10,
-      "unit": "banana",
+      "unit": "bananas",
       "incrementor": 1,
-      "location": "Costco"
+      "location": "Costco",
+      "image": "images/salad.svg"
     }
   ]
 };
 
-// viewing inventory
+// TODO: replace with HTTP call
 function getItems(callback) {
   setTimeout(function() {
     callback(MOCK_ITEMS_DATA.items);
-  }, 300);
+  }, 0);
 }
 
 function printItems(items) {
@@ -33,25 +35,27 @@ function printItems(items) {
 
   var result = items.reduce(function(resultStr, item) {
     return resultStr + (
-      '<div class="itemCard">' +
-        '<div class="itemCard_remove">X</div>' +
-        '<h3 class="itemCard_itemName">Spinach</h3>' +
-        '<img src="" alt="" title=""/>' +
-        '<div class="itemCard_ammountChanger">' +
-          '<div class="itemCard_decrementor"><<</div>' +
-          '<div class="itemCard_ammountContainer">' +
-            '<span>1 </span>' +
-            '<span>/ </span>' +
-            '<span>2 </span>' +
-            '<span>bins</span>' +
+      '<div class="col itemCard">' +
+        '<div class="card">' +
+          '<div class="remove">X</div>' +
+          '<h3 class="itemName">' + item.itemName + '</h3>' +
+          '<img class="image" src=' + item.image + ' alt="" title=""/>' +
+          '<div class="amountChanger">' +
+            '<img class="decrementor" src="images/left-arrow.svg">' +
+            '<span class="amountContainer">' +
+              '<span>' + item.quantity + ' </span>' +
+              '<span>/ </span>' +
+              '<span>' + item.target + ' </span>' +
+              '<span>' + item.unit + '</span>' +
+            '</span>' +
+            '<img class="incrementor" src="images/right-arrow.svg">' +
           '</div>' +
-          '<div class="itemCard_decrementor">>></div>' +
         '</div>' +
       '</div>'
     );
   }, '');
 
-  $('.items').append(result);
+  $('.js-itemsRow').append(result);
 }
 
 $(function() {

@@ -23,4 +23,3 @@ function printItem(item) {
     'name: ' + item.itemName
   );
 }
-
