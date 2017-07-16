@@ -1,5 +1,1 @@
-* {
-  font-family: arial, sans-serif;
-  color: #252525;
-  background: #eee;
-}
+*,*:before,*:after{box-sizing:border-box}body{margin:0;min-width:320px;font-family:arial,sans-serif}html,body{max-width:100%;overflow-x:hidden}.container{margin:0 auto;padding:0 20px}.row{margin-right:-10px;margin-left:-10px}.row:after{content:"";display:table;clear:both}.col{float:left;width:100%;padding-right:10px;padding-left:10px}.clearfix:after{content:"";display:table;clear:both}.itemCard{width:25%}

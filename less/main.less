@@ -1,0 +1,91 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: arial, sans-serif;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/***********************************************
+GRID
+/***********************************************/
+.container {
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.row {
+  margin-right: -10px;
+  margin-left: -10px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.col {
+  float: left;
+  width: 100%;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+/************************************************
+UTILITY CLASSES
+/************************************************/
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/************************************************
+INVENTORY PAGE
+/************************************************/
+
+/************************************************
+ITEM CARD
+/************************************************/
+.itemCard {
+  width: 25%;
+
+  .remove {
+    //
+  }
+
+  .itemName {
+    //
+  }
+
+  .image {
+    //
+  }
+
+  .ammountChanger {
+    //
+  }
+
+  .decrementor {
+    //
+  }
+
+  .ammountContainer {
+    //
+  }
+
+  .incrementor {
+    //
+  }
+}

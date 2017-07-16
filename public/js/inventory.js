@@ -25,7 +25,7 @@ var MOCK_ITEMS_DATA = {
 function getItems(callback) {
   setTimeout(function() {
     callback(MOCK_ITEMS_DATA.items);
-  }, 300);
+  }, 0);
 }
 
 function printItems(items) {
@@ -33,25 +33,25 @@ function printItems(items) {
 
   var result = items.reduce(function(resultStr, item) {
     return resultStr + (
-      '<div class="itemCard">' +
-        '<div class="itemCard_remove">X</div>' +
-        '<h3 class="itemCard_itemName">Spinach</h3>' +
-        '<img src="" alt="" title=""/>' +
-        '<div class="itemCard_ammountChanger">' +
-          '<div class="itemCard_decrementor"><<</div>' +
-          '<div class="itemCard_ammountContainer">' +
+      '<div class="itemCard col">' +
+        '<div class="remove">X</div>' +
+        '<h3 class="itemName">Spinach</h3>' +
+        '<img class="image" src="" alt="" title=""/>' +
+        '<div class="ammountChanger">' +
+          '<div class="decrementor"><<</div>' +
+          '<div class="ammountContainer">' +
             '<span>1 </span>' +
             '<span>/ </span>' +
             '<span>2 </span>' +
             '<span>bins</span>' +
           '</div>' +
-          '<div class="itemCard_decrementor">>></div>' +
+          '<div class="incrementor">>></div>' +
         '</div>' +
       '</div>'
     );
   }, '');
 
-  $('.items').append(result);
+  $('.itemsRow').append(result);
 }
 
 $(function() {

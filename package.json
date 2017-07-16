@@ -17,7 +17,9 @@
   "scripts": {
     "test": "mocha",
     "start": "node server.js",
-    "start:dev": "./node_modules/.bin/nodemon server.js"
+    "start:dev": "./node_modules/.bin/nodemon server.js",
+    "less": "./node_modules/.bin/lessc less/main.less public/css/main.css",
+    "less:watch": "less-watch-compiler less public/css"
   },
   "author": "",
   "license": "ISC"
