@@ -5,6 +5,7 @@ require('dotenv').config();
 
 app.use('/css', express.static('public/css'));
 app.use('/js', express.static('public/js'));
+app.use('/images', express.static('public/images'));
 
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/inventory.html`);

@@ -52,40 +52,111 @@ UTILITY CLASSES
 }
 
 /************************************************
-INVENTORY PAGE
+ADD ITEM PAGE
 /************************************************/
+.addItem {
+  padding: 20px 0;
+
+  .form {
+    padding: 15px;
+    background: #eee;
+  }
+
+  .headline {
+    text-align: center;
+    margin: 0;
+    padding-bottom: 15px; 
+  }
+
+  .formGroup {
+    padding-bottom: 7px;
+  }
+
+  .targetAmountGroup,
+  .currentAmountGroup {
+    width: 48%;
+    float: left;
+  }
+
+  .targetAmountGroup {
+    margin-right: 4%;
+  }
+
+  .label {
+    display: block;
+    padding-bottom: 7px;
+  }
+
+  .textInput {
+    display: block;
+    width: 100%;
+    border: 1px solid #aaa;
+    height: 30px;
+  }
+
+  .button {
+    display: block;
+    background: #aaa;
+    border: none;
+    min-width: 200px;
+    margin: 15px auto;
+    padding: 10px 20px;
+  }
+
+  .textInput,
+  .button {
+    &:focus {
+      outline-color: rgba(43, 43, 255, 0.55);
+    }
+  }
+
+}
 
 /************************************************
-ITEM CARD
+INVENTORY PAGE
 /************************************************/
-.itemCard {
-  width: 25%;
+.inventory {
+  padding-bottom: 20px; 
+
+  .card {
+    position: relative;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #eee;
+  }
 
   .remove {
-    //
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 15px;
   }
 
   .itemName {
-    //
+    text-align: center;
+    margin: 0;
   }
 
   .image {
-    //
+    display: block;
+    padding: 20px 0;
+    margin: 0 auto;
+    width: 150px;
   }
 
-  .ammountChanger {
-    //
+  .amountChanger {
+    text-align: center;
   }
 
-  .decrementor {
-    //
-  }
-
-  .ammountContainer {
-    //
-  }
-
+  .decrementor,
   .incrementor {
-    //
+    position: relative;
+    top: 6px;
+    cursor: pointer;
+    width: 25px;
+  }
+
+  .amountContainer {
+    padding: 0 10px;
   }
 }
