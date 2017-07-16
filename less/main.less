@@ -59,33 +59,50 @@ INVENTORY PAGE
 ITEM CARD
 /************************************************/
 .itemCard {
-  width: 25%;
+
+  .card {
+    position: relative;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #eee;
+  }
 
   .remove {
-    //
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 15px;
   }
 
   .itemName {
-    //
+    text-align: center;
+    margin: 0;
   }
 
   .image {
-    //
+    display: block;
+    padding: 20px 0;
+    margin: 0 auto;
+    width: 150px;
   }
 
-  .ammountChanger {
-    //
+  .amountChanger {
+    text-align: center;
   }
 
-  .decrementor {
-    //
+  .decrementor,
+  .incrementor {
+    position: relative;
+    top: 6px;
+    cursor: pointer;
+    width: 25px;
   }
 
-  .ammountContainer {
-    //
+  .amountContainer {
+    padding: 0 10px;
   }
 
   .incrementor {
-    //
+    /**/
   }
 }
