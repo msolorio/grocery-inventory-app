@@ -1,21 +1,28 @@
 console.log('in inventory js');
 
+///////////////////////////////////////////////
+// STATE
+///////////////////////////////////////////////
+var state = {
+};
+
+// simulates data from initial GET request
 var MOCK_ITEMS_DATA = {
   items: [
     {
       "itemName": "Spinach",
-      "quantity": 2,
-      "target": 2,
-      "unit": "tubs",
+      "currentAmount": 2,
+      "targetAmount": 2,
+      "unitName": "tubs",
       "incrementor": 0.25,
       "location": "Sprouts",
       "image": "images/salad.svg"
     },
     {
       "itemName": "Bananas",
-      "quantity": 4,
-      "target": 10,
-      "unit": "bananas",
+      "currentAmount": 4,
+      "targetAmount": 10,
+      "unitName": "bananas",
       "incrementor": 1,
       "location": "Costco",
       "image": "images/salad.svg"
@@ -23,41 +30,90 @@ var MOCK_ITEMS_DATA = {
   ]
 };
 
-// TODO: replace with HTTP call
-function getItems(callback) {
+function getItems(renderItems) {
+
+  // mocks GET request for all items
   setTimeout(function() {
-    callback(MOCK_ITEMS_DATA.items);
+    state.items = MOCK_ITEMS_DATA.items;
+
+    renderItems(state.items);
   }, 0);
 }
 
-function printItems(items) {
-  console.log('in printItems');
+function renderItems(items) {
 
-  var result = items.reduce(function(resultStr, item) {
+  var result = items.reduce(function(resultStr, item, index) {
     return resultStr + (
-      '<div class="col itemCard">' +
+      '<div class="col">' +
         '<div class="card">' +
-          '<div class="remove">X</div>' +
+          '<div class="edit" data-cardNum=' + index + '>Edit</div>' +
+          '<div class="remove" data-cardNum=' + index + '>X</div>' +
           '<h3 class="itemName">' + item.itemName + '</h3>' +
           '<img class="image" src=' + item.image + ' alt="" title=""/>' +
           '<div class="amountChanger">' +
-            '<img class="decrementor" src="images/left-arrow.svg">' +
+            '<img class="decrementor" data-cardNum=' + index + ' src="images/left-arrow.svg">' +
             '<span class="amountContainer">' +
-              '<span>' + item.quantity + ' </span>' +
+              '<span>' + item.currentAmount + ' </span>' +
               '<span>/ </span>' +
-              '<span>' + item.target + ' </span>' +
-              '<span>' + item.unit + '</span>' +
+              '<span>' + item.targetAmount + ' </span>' +
+              '<span>' + item.unitName + '</span>' +
             '</span>' +
-            '<img class="incrementor" src="images/right-arrow.svg">' +
+            '<img class="incrementor" data-cardNum=' + index + ' src="images/right-arrow.svg">' +
           '</div>' +
         '</div>' +
       '</div>'
     );
   }, '');
 
-  $('.js-itemsRow').append(result);
+  $('.js-itemsRow').html(result);
+}
+
+function listenForDecrementorClick() {
+  $('.js-itemsRow').on('click', '.decrementor', function() {
+    console.log('decrementor clicked');
+  });
+}
+
+///////////////////////////////////////////////
+// ADD ITEM SCREEN
+///////////////////////////////////////////////
+function getNewItemData() {
+  var newItem = {};
+  newItem.itemName = $('.js-itemName').val();
+  newItem.targetAmount = parseInt($('.js-targetAmount').val());
+  newItem.currentAmount = parseInt($('.js-currentAmount').val());
+  newItem.unitName = $('.js-unitName').val();
+  newItem.location = $('.js-location').val();
+  newItem.image = 'images/salad.svg';
+
+  return newItem;
+}
+
+// adding an item
+function addItem(renderItems) {
+
+  // simulates POST request
+  setTimeout(function() {
+
+    var newItem = getNewItemData();
+
+    state.items.unshift(newItem);
+
+    renderItems(state.items);
+  }, 0);
+}
+
+function listenForAddItem() {
+  $('.js-addItemButton').click(function(event) {
+    event.preventDefault();
+    addItem(renderItems);
+  });
 }
 
 $(function() {
-  getItems(printItems);
+
+  getItems(renderItems);
+
+  listenForAddItem();
+  listenForDecrementorClick();
 });
