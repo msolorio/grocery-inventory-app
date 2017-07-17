@@ -45,11 +45,13 @@ GRID
 /************************************************
 UTILITY CLASSES
 /************************************************/
-.clearfix:after {
-  content: "";
-  display: table;
-  clear: both;
-}
+.clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;  
+  }
+};
 
 /************************************************
 ADD ITEM PAGE
@@ -76,13 +78,13 @@ ADD ITEM PAGE
   .currentAmountGroup,
   .unitNameGroup,
   .stepValGroup {
-    width: 48%;
+    width: ~"calc(50% - 8px)";
     float: left;
   }
 
   .targetAmountGroup,
   .unitNameGroup {
-    margin-right: 4%;
+    margin-right: 16px;
   }
 
   .label {
@@ -119,7 +121,13 @@ ADD ITEM PAGE
 INVENTORY PAGE
 /************************************************/
 .inventory {
-  padding-bottom: 20px; 
+  // padding-bottom: 20px;
+
+  .headline {
+    text-align: center;
+    margin: 0;
+    padding-bottom: 15px;
+  }
 
   .card {
     position: relative;
@@ -157,6 +165,60 @@ INVENTORY PAGE
     top: 6px;
     cursor: pointer;
     width: 25px;
+  }
+
+  .amountContainer {
+    padding: 0 10px;
+  }
+}
+
+.lists {
+  .listsContainer {
+    background: #eee;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .headline {
+    text-align: center;
+    margin: 0;
+    padding-bottom: 15px;
+  }
+
+  .location {
+    margin: 0;
+    padding-bottom: 10px;
+  }
+
+  .listItem {
+    padding-bottom: 7px;
+    border-bottom: 1px solid #bbb;
+    margin-bottom: 7px;
+    .clearfix;
+  }
+
+  .itemName {
+    // display: inline-block;
+    float: left;
+    padding-right: 10px;
+  }
+
+  .amountNeeded {
+    float: right;
+    padding-right: 10px;
+  }
+
+  .checkmark {
+    width: 17px;
+    float: right;
+  }
+
+  .decrementor,
+  .incrementor {
+    position: relative;
+    top: 3px;
+    cursor: pointer;
+    width: 17px;
   }
 
   .amountContainer {

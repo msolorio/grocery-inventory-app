@@ -27,13 +27,31 @@ var MOCK_ITEMS_DATA = {
       stepVal: 1,
       location: "Costco",
       image: "images/salad.svg"
+    },
+    {
+      "itemName": "Avocados",
+      currentAmount: 4,
+      targetAmount: 10,
+      unitName: "avs",
+      stepVal: 1,
+      location: "Sprouts",
+      image: "images/salad.svg"
     }
   ]
 };
 
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// INVENTORY SCREEN
+///////////////////////////////////////////////////////////
+
 function getItems(renderItems) {
 
   // simulates GET request for all items
+  // /api/users/:user_id/items
   setTimeout(function() {
     state.items = MOCK_ITEMS_DATA.items;
 
@@ -67,15 +85,19 @@ function renderItems(items) {
   }, '');
 
   $('.js-itemsRow').html(result);
+
+  // TODO: will be called when switching to list view
+  generateLists(renderLists);
 }
 
 function decrementItem(itemNum, renderItems) {
   // simulates PUT request
+  // /api/users/:user_id/items/:item_id
   setTimeout(function() {
     state.items[itemNum].currentAmount -= state.items[itemNum].stepVal;
 
     renderItems(state.items);
-  }, 100); 
+  }, 0); 
 }
 
 function listenForDecrementorClick() {
@@ -86,13 +108,14 @@ function listenForDecrementorClick() {
 }
 
 function incrementItem(itemNum, renderItems) {
-  // simulates PUT request
+  // simulates PUT request to update grocery item
+  // /api/users/:user_id/items/:item_id
   setTimeout(function() {
 
     state.items[itemNum].currentAmount += state.items[itemNum].stepVal;
 
     renderItems(state.items);
-  }, 100);
+  }, 0);
 }
 
 function listenForIncrementorClick() {
@@ -104,7 +127,8 @@ function listenForIncrementorClick() {
 
 function removeItem(itemNum, renderItems) {
 
-  // simulates DELETE REQUEST
+  // simulates DELETE request
+  // /api/users/:user_id/items/:item_id
   setTimeout(function() {
     state.items.splice(itemNum, 1);
 
@@ -127,9 +151,13 @@ function parseDecimal(string) {
   return Math.round(parseFloat(string) * 100) / 100;
 }
 
-///////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 // ADD ITEM SCREEN
-///////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 function getNewItemData() {
   var newItem = {};
   newItem.itemName = $('.js-itemName').val();
@@ -155,7 +183,8 @@ function clearForm() {
 // adding an item
 function addItem(renderItems) {
 
-  // simulates POST request
+  // simulates POST request to create new item
+  // /api/users/:user_id/items
   setTimeout(function() {
     var newItem = getNewItemData();
     state.items.unshift(newItem);
@@ -172,6 +201,113 @@ function listenForAddItem() {
   });
 }
 
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// LISTS SCREEN
+///////////////////////////////////////////////////////////
+function generateSingleListMarkup(list) {
+  var singleListMarkup = (
+    '<div class="col singleList">' +
+      '<h3 class="location">' + list.location + '</h3>'
+  );
+  singleListMarkup += list.items.reduce(function(itemsList, item, index) {
+    return itemsList += (
+      '<div class="listItem js-listItem">' +
+        '<div class="itemName">' + item.itemName + '</div>' +
+        '<img class="checkmark js-checkmark" src="images/checked-button.svg" title="' + item.itemName + '" alt="check ' + item.itemName + '" data-listitemnum="' + index + '" data-location="' + list.location + '" data-itemname="' + item.itemName +'">' +
+        '<div class="amountNeeded">' + item.amountNeeded + ' ' + item.unitName + '</div>' +
+      '</div>'
+    );
+  }, '');
+
+  singleListMarkup += '</div>';
+
+  return singleListMarkup;
+}
+
+function renderLists(listsObj) {
+
+  var allListsMarkup = '';
+
+  for (var list in listsObj) {
+    allListsMarkup += generateSingleListMarkup(listsObj[list]);
+  }
+
+  $('.js-listsRow').html(allListsMarkup);
+}
+
+function generateLists(renderLists) {
+  
+  var listsArray = state.items.reduce(function(lists, item) {
+    if (item.targetAmount - item.currentAmount <= 0) {
+      return lists;
+    }
+
+    if (!(item.location in lists)) {
+      lists[item.location] = {
+        location: item.location,
+        items: []
+      };
+    }
+
+    var newItem = {
+      itemName: item.itemName,
+      amountNeeded: (item.targetAmount - item.currentAmount),
+      unitName: item.unitName,
+      stepVal: item.stepVal
+    }
+
+    lists[item.location].items.push(newItem);
+
+    return lists;
+  }, {});
+
+  state.lists = listsArray;
+
+  renderLists(state.lists);
+}
+
+function checkOffListItem(listItemLocation, listItemNum, itemName) {
+
+  setTimeout(function() {
+    // simulates HTTP DELETE request remove list item
+    // /api/users/:user_id/lists/:list_item_id
+    state.lists[listItemLocation].items.splice(listItemNum, 1);
+
+    // simulates HTTP PUT request to update item
+    // /api/users/:user_id/items/:item_id
+    state.items.forEach(function(item, index) {
+      if (item.itemName === itemName) {
+        state.items[index].currentAmount = state.items[index].targetAmount;
+      }
+    });
+
+    renderItems(state.items);
+  }, 0);
+}
+
+function listenForListItemClick() {
+  $('.js-listsRow').on('click', '.js-checkmark', function(event) {
+      event.target = this;
+
+    var listItemNum = $(event.target).data('listitemnum');
+    var listItemLocation = $(event.target).data('location');
+    var itemName = $(event.target).data('itemname');
+
+    checkOffListItem(listItemLocation, listItemNum, itemName);
+  });
+}
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+// LISTENERS
+///////////////////////////////////////////////////////////
 $(function() {
 
   getItems(renderItems);
@@ -180,6 +316,7 @@ $(function() {
   listenForDecrementorClick();
   listenForIncrementorClick();
   listenForDeleteClick();
+  listenForListItemClick();
 });
 
 }());
