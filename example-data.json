@@ -1,22 +1,68 @@
-{
-  "username": "feedme",
-  "password": "1234",
-  "inventory": [
-    {
-      "itemName": "spinach",
-      "quantity": 2,
-      "target": 2,
-      "unit": "tub",
-      "incrementor": 0.25,
-      "location": "Sprouts"
-    },
-    {
-      "itemName": "bananas",
-      "quantity": 4,
-      "target": 10,
-      "unit": "banana",
-      "incrementor": 1,
-      "location": "Costco"
-    }
-  ]
-}
+[
+  {
+    "username": "feedme",
+    "password": "1234",
+    "items": [
+      {
+        "itemName": "Spinach",
+        "currentAmount": 2,
+        "targetAmount": 2,
+        "unitName": "tubs",
+        "stepVal": 0.25,
+        "location": "Sprouts",
+        "image": "images/salad.svg"
+      },
+      {
+        "itemName": "Bananas",
+        "currentAmount": 4,
+        "targetAmount": 10,
+        "unitName": "bananas",
+        "stepVal": 1,
+        "location": "Costco",
+        "image": "images/salad.svg"
+      },
+      {
+        "itemName": "Avocados",
+        "currentAmount": 4,
+        "targetAmount": 10,
+        "unitName": "avs",
+        "stepVal": 1,
+        "location": "Sprouts",
+        "image": "images/salad.svg"
+      }
+    ]
+  },
+  {
+    "username": "Earl",
+    "password": "9999",
+    "items": [
+      {
+        "itemName": "Spinach",
+        "currentAmount": 2,
+        "targetAmount": 2,
+        "unitName": "tubs",
+        "stepVal": 0.25,
+        "location": "Sprouts",
+        "image": "images/salad.svg"
+      },
+      {
+        "itemName": "Bananas",
+        "currentAmount": 4,
+        "targetAmount": 10,
+        "unitName": "bananas",
+        "stepVal": 1,
+        "location": "Costco",
+        "image": "images/salad.svg"
+      },
+      {
+        "itemName": "Avocados",
+        "currentAmount": 4,
+        "targetAmount": 10,
+        "unitName": "avs",
+        "stepVal": 1,
+        "location": "Sprouts",
+        "image": "images/salad.svg"
+      }
+    ]
+  }
+]

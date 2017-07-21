@@ -215,9 +215,9 @@ function generateSingleListMarkup(list) {
   );
   singleListMarkup += list.items.reduce(function(itemsList, item, index) {
     return itemsList += (
-      '<div class="listItem js-listItem">' +
+      '<div class="listItem js-listItem" data-listitemnum="' + index + '" data-location="' + list.location + '" data-itemname="' + item.itemName +'">' +
         '<div class="itemName">' + item.itemName + '</div>' +
-        '<img class="checkmark js-checkmark" src="images/checked-button.svg" title="' + item.itemName + '" alt="check ' + item.itemName + '" data-listitemnum="' + index + '" data-location="' + list.location + '" data-itemname="' + item.itemName +'">' +
+        '<img class="checkmark js-checkmark" src="images/checked-button.svg" title="' + item.itemName + '" alt="check ' + item.itemName + '">' +
         '<div class="amountNeeded">' + item.amountNeeded + ' ' + item.unitName + '</div>' +
       '</div>'
     );
@@ -290,7 +290,7 @@ function checkOffListItem(listItemLocation, listItemNum, itemName) {
 }
 
 function listenForListItemClick() {
-  $('.js-listsRow').on('click', '.js-checkmark', function(event) {
+  $('.js-listsRow').on('click', '.js-listItem', function(event) {
       event.target = this;
 
     var listItemNum = $(event.target).data('listitemnum');
@@ -306,7 +306,7 @@ function listenForListItemClick() {
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
-// LISTENERS
+// ON LOAD
 ///////////////////////////////////////////////////////////
 $(function() {
 

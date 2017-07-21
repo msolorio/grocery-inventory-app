@@ -1,7 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 const app = express();
-require('dotenv').config();
+const userRouter = require('./routes/usersRoute');
+
+mongoose.Promise = global.Promise;
 
 app.use('/css', express.static('public/css'));
 app.use('/js', express.static('public/js'));
@@ -11,28 +15,31 @@ app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/inventory.html`);
 });
 
-app.get('/addItem', (req, res) => {
-  res.sendFile(`${__dirname}/addItem.html`);
-});
+app.use('/users', userRouter);
 
-app.get('/lists', (req, res) => {
-  res.sendFile(`${__dirname}/lists.html`);
-});
+// userRouter.js
+// app.use('/items/:item_id', itemsRouter);
 
-app.get('/inventory', (req, res) => {
-  res.redirect('/');
+app.get('*', (req, res) => {
+  res.status(404).json({message: 'resource not found'});
 });
 
 let server;
 
-function runServer(port) {
+function runServer(databaseUrl, port) {
   return new Promise((resolve, reject) => {
-    server = app.listen(port || 3000, () => {
+    mongoose.connect(databaseUrl, (err) => {
+      if (err) {
+        return reject(err);
+      }
+    });
+    server = app.listen(port, () => {
       console.log(`server listening on port: ${port}`);
       return resolve();
     })
     .on('error', (err) => {
-      reject();
+      mongoose.disconnect();
+      reject(err);
     });
   });
 }
@@ -51,7 +58,7 @@ function closeServer() {
 // if file is run directly by calling node server js
 // we call runServer
 if (require.main === module) {
-  runServer(process.env.PORT).catch((err) => {
+  runServer(process.env.DATABASE_URL, process.env.PORT).catch((err) => {
     console.error('error:', err);
   });
 }
