@@ -1,9 +1,13 @@
+'use strict';
+
 require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const app = express();
-const userRouter = require('./routes/usersRoute');
+const userRouter = require('./routes/usersRouter');
+const loginRouter = require('./routes/loginRouter');
+const path = require('path');
 
 mongoose.Promise = global.Promise;
 
@@ -11,8 +15,12 @@ app.use('/css', express.static('public/css'));
 app.use('/js', express.static('public/js'));
 app.use('/images', express.static('public/images'));
 
-app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/inventory.html`);
+// app.get('/', (req, res) => {
+//   res.sendFile(`${__dirname}/index.html`);
+// });
+
+app.use('/login', (req, res) => {
+  res.sendFile(`${__dirname}/login.html`);
 });
 
 app.use('/users', userRouter);
@@ -20,9 +28,9 @@ app.use('/users', userRouter);
 // userRouter.js
 // app.use('/items/:item_id', itemsRouter);
 
-app.get('*', (req, res) => {
-  res.status(404).json({message: 'resource not found'});
-});
+// app.get('*', (req, res) => {
+//   res.status(404).json({message: 'resource not found'});
+// });
 
 let server;
 

@@ -1,4 +1,7 @@
+'use strict';
+
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 // const itemSchema = mongoose.Schema({
 //   itemName: {type: String, required: true},
@@ -34,7 +37,7 @@ const mongoose = require('mongoose');
 
 // module.exports = { Item };
 
-const userSchema = mongoose.Schema({
+const UserSchema = mongoose.Schema({
   username: {type: String, required: true},
   password: {type: String, required: true},
   items: [{
@@ -51,7 +54,7 @@ const userSchema = mongoose.Schema({
 
 // can I create a virtual property (deficit) on each item???
 
-userSchema.methods.apiRepr = function() {
+UserSchema.methods.apiRepr = function() {
   return {
     id: this._id,
     username: this.username,
@@ -60,12 +63,24 @@ userSchema.methods.apiRepr = function() {
   };
 };
 
-const itemSchema = mongoose.Schema({
-  itemName: {type: String, required: true},
-  popularity: {type: Number, required: true}
-});
+UserSchema.methods.getItems = function() {
+  return this.items;
+}
 
-const User = mongoose.model('user', userSchema);
-const Item = mongoose.model('item', itemSchema);
+UserSchema.methods.validatePassword = function(password) {
+  return bcrypt.compare(password, this.password);
+}
+
+UserSchema.statics.generateHash = function(password) {
+  return bcrypt.hash(password, 10);
+}
+
+// const itemSchema = mongoose.Schema({
+//   itemName: {type: String, required: true},
+//   popularity: {type: Number, required: true}
+// });
+
+const User = mongoose.model('user', UserSchema);
+// const Item = mongoose.model('item', itemSchema);
 
 module.exports = { User };

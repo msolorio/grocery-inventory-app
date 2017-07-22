@@ -23,16 +23,16 @@ describe('grocery inventory API resource:', function() {
     return closeServer();
   });
 
-  describe('GET to /', function() {
+  // describe('GET to /', function() {
 
-    it('should return HTML', function() {
-      return chai.request(app)
-        .get('/')
-        .then(function(res) {
-          res.should.have.status(200);
-          res.should.be.html;
-        });
-    });
+  //   it('should return HTML', function() {
+  //     return chai.request(app)
+  //       .get('/')
+  //       .then(function(res) {
+  //         res.should.have.status(200);
+  //         res.should.be.html;
+  //       });
+  //   });
 
-  });
+  // });
 });
