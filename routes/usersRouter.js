@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const jsonParser = require('body-parser').json();
-const { BasicStrategy } = require('passport-http');
+const ourBasicStrategy = require('../middleware/passport/ourBasicStrategy');
 const path = require('path');
 
 // const mongoose = require('mongoose');
@@ -13,26 +13,7 @@ const router = express.Router();
 
 const { User } = require('../models');
 
-const basicStrategy = new BasicStrategy((username, password, done) => {
-  User.findOne({username: username}, (err, user) => {
-    
-    if (err) {
-      return done(err);
-    }
-
-    if (!user) {
-      return done(null, false, { message: 'username does not exist'});
-    }
-
-    if (!user.validatePassword(password)) {
-      return done(null, false, { message: 'password is incorrect'});
-    }
-
-    return done(null, user);
-  });
-});
-
-passport.use(basicStrategy);
+passport.use(ourBasicStrategy);
 router.use(passport.initialize());
 
 // router.post('/login',
