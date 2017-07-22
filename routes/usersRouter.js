@@ -62,22 +62,6 @@ router.get('/:username', (req, res) => {
 
 router.use('/:username/items', itemsRouter);
 
-// router.get('/:username/items', (req, res) => {
-//   console.log(`GET request made to /${req.params.username}/items`);
-
-//   User
-//     .findOne({username: req.params.username})
-//     .exec()
-//     .then((user) => {
-//       console.log(`found user ${req.params.username}`);
-//       res.status(200).json({items: user.getItems()});
-//     })
-//     .catch((err) => {
-//       console.log('error:', err);
-//       res.status(500).json({message: `unable to find user: ${req.params.username}`});
-//     });
-// });
-
 router.post('/', bodyParser.json(), (req, res) => {
   console.log('POST request made to /users');
 
