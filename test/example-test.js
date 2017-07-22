@@ -10,7 +10,7 @@ const { app, runServer, closeServer } = require('../server');
 describe('grocery inventory API resource:', function() {
 
   before(function() {
-    return runServer(process.env.PORT);
+    return runServer(process.env.TEST_DATABASE_URL, process.env.PORT);
   });
 
   beforeEach(function() {
@@ -23,51 +23,16 @@ describe('grocery inventory API resource:', function() {
     return closeServer();
   });
 
-  describe('GET to /:', function() {
+  // describe('GET to /', function() {
 
-    it('should return HTML', function() {
-      return chai.request(app)
-        .get('/')
-        .then(function(res) {
-          res.should.have.status(200);
-          res.should.be.html;
-        });
-    });
+  //   it('should return HTML', function() {
+  //     return chai.request(app)
+  //       .get('/')
+  //       .then(function(res) {
+  //         res.should.have.status(200);
+  //         res.should.be.html;
+  //       });
+  //   });
 
-  });
-
-  describe('GET to /addItem:', function() {
-
-    it('should return HTML', function() {
-      return chai.request(app)
-        .get('/addItem')
-        .then(function(res) {
-          res.should.have.status(200);
-          res.should.be.html;
-        });
-    });
-  });
-
-  describe('GET to /lists:', function() {
-
-    it('should return HTML', function() {
-      return chai.request(app)
-        .get('/lists')
-        .then(function(res) {
-          res.should.have.status(200);
-          res.should.be.html;
-        });
-    });
-  });
-
-  describe('GET to /inventory', function() {
-    it('should redirect to /', function() {
-      return chai.request(app)
-        .get('/inventory')
-        .then(function(res) {
-          res.should.have.status(200);
-          res.should.be.html;
-        });
-    });
-  });
+  // });
 });
