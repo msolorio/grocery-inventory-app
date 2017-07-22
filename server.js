@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const app = express();
 const userRouter = require('./routes/usersRouter');
-const loginRouter = require('./routes/loginRouter');
 const path = require('path');
 
 mongoose.Promise = global.Promise;

@@ -4,42 +4,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const jsonParser = require('body-parser').json();
-const { BasicStrategy } = require('passport-http');
 const path = require('path');
-
-// const mongoose = require('mongoose');
-
+const itemsRouter = require('./itemsRouter');
 const router = express.Router();
 
 const { User } = require('../models');
 
-const basicStrategy = new BasicStrategy((username, password, done) => {
-  User.findOne({username: username}, (err, user) => {
-    
-    if (err) {
-      return done(err);
-    }
-
-    if (!user) {
-      return done(null, false, { message: 'username does not exist'});
-    }
-
-    if (!user.validatePassword(password)) {
-      return done(null, false, { message: 'password is incorrect'});
-    }
-
-    return done(null, user);
-  });
-});
-
-passport.use(basicStrategy);
+const ourBasicStrategy = require('../middleware/passport/ourBasicStrategy');
+passport.use(ourBasicStrategy);
 router.use(passport.initialize());
-
-// router.post('/login',
-//   passport.authenticate('basic', { session: false }),
-//   (req, res) => {
-//     res.json(req.user);
-//   });
 
 // [for dev]
 // router.get('/', (req, res) => {
@@ -87,21 +60,23 @@ router.get('/:username', (req, res) => {
   res.sendFile(path.join(__dirname + '/../user.html'));
 });
 
-router.get('/:username/items', (req, res) => {
-  console.log(`GET request made to /${req.params.username}/items`);
+router.use('/:username/items', itemsRouter);
 
-  User
-    .findOne({username: req.params.username})
-    .exec()
-    .then((user) => {
-      console.log(`found user ${req.params.username}`);
-      res.status(200).json({items: user.getItems()});
-    })
-    .catch((err) => {
-      console.log('error:', err);
-      res.status(500).json({message: `unable to find user: ${req.params.username}`});
-    });
-});
+// router.get('/:username/items', (req, res) => {
+//   console.log(`GET request made to /${req.params.username}/items`);
+
+//   User
+//     .findOne({username: req.params.username})
+//     .exec()
+//     .then((user) => {
+//       console.log(`found user ${req.params.username}`);
+//       res.status(200).json({items: user.getItems()});
+//     })
+//     .catch((err) => {
+//       console.log('error:', err);
+//       res.status(500).json({message: `unable to find user: ${req.params.username}`});
+//     });
+// });
 
 router.post('/', bodyParser.json(), (req, res) => {
   console.log('POST request made to /users');
