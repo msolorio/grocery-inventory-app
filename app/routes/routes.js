@@ -19,7 +19,7 @@ module.exports = function(app, passport) {
 	// example of custom handling of authentication
 	// https://stackoverflow.com/questions/15711127/express-passport-node-js-error-handling
 
-	// LOGIN ATTEMPT /////////////////////////////////////////
+	// LOGIN ATTEMPT (custom authentication handling) //////////
 	app.post('/login', (req, res, next) => {
 
 		passport.authenticate('local-login', (err, user, info) => {
@@ -48,13 +48,30 @@ module.exports = function(app, passport) {
 		res.render('signup.ejs', { message: req.flash('signupMessage')});
 	});
 
-	app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect: '/profile',
-		failureRedirect: '/signup',
-		failureFlash: true
-	}));
+	// SIGNUP ATTEMPT (custom authentication handling) /////////
+	app.post('/signup', (req, res, next) => {
 
-	app.get('/profile/:username', isLoggedIn, (req, res) => {
+		passport.authenticate('local-signup', (err, user, info) => {
+			if (err) return next(err);
+
+			if (!user) return res.redirect('/signup');
+
+			req.login(user, (loginErr) => {
+				if (loginErr) return next(loginErr);
+
+				return res.redirect(`/profile/${user.local.username}`);
+			});
+		})(req, res, next);
+
+	});
+
+	// app.post('/signup', passport.authenticate('local-signup', {
+	// 	successRedirect: '/profile',
+	// 	failureRedirect: '/signup',
+	// 	failureFlash: true
+	// }));
+
+	app.get('/profile/:username', isLoggedIn, (req, res) => {	
 		res.sendFile(path.join(__dirname + '/../../views/profile.html'));
 	});
 
@@ -69,8 +86,6 @@ module.exports = function(app, passport) {
 function isLoggedIn(req, res, next) {
 	const cookiedUser = req.user && req.user.local.username || null;
 	const paramsUser = req.params.username || null;
-	console.log('cookiedUser:', cookiedUser);
-	console.log('paramsUser:', paramsUser);
 	if (cookiedUser &&
 			paramsUser &&
 			paramsUser === cookiedUser &&
