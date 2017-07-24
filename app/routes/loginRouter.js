@@ -1,18 +1,20 @@
-// 'use strict';
+'use strict';
 
 // const flash = require('connect-flash');
 const path = require('path');
 
+const usersRouter = require('./usersRouter');
+
 module.exports = function(app, passport) {
 
 	// HOMEPAGE ////////////////////////////////////////////////
-	app.get('/', isLoggedIn, (req, res) => {
+	app.get('/', ifLoggedIn, (req, res) => {
 
 		res.sendFile(path.join(__dirname + '/../../views/index.html'));
 	});
 
 	// LOGIN PAGE //////////////////////////////////////////////
-	app.get('/login', isLoggedIn, (req, res) => {
+	app.get('/login', ifLoggedIn, (req, res) => {
 		res.render('login.ejs', { message: req.flash('loginMessage')});
 	});
 
@@ -28,14 +30,14 @@ module.exports = function(app, passport) {
 			req.login(user, (loginErr) => {
 				if (loginErr) return next(loginErr);
 
-				return res.redirect(`/profile/${user.local.username}`);
+				res.redirect(`/users/${user.local.username}`);
 			});
 		})(req, res, next);
 
 	});
 
 	// SINGUP PAGE /////////////////////////////////////////////
-	app.get('/signup', isLoggedIn, (req, res) => {
+	app.get('/signup', ifLoggedIn, (req, res) => {
 		res.render('signup.ejs', { message: req.flash('signupMessage')});
 	});
 
@@ -50,36 +52,38 @@ module.exports = function(app, passport) {
 			req.login(user, (loginErr) => {
 				if (loginErr) return next(loginErr);
 
-				return res.redirect(`/profile/${user.local.username}`);
+				res.redirect(`/users/${user.local.username}`);
 			});
 		})(req, res, next);
 
 	});
 
+	// PROFILE PAGE /////////////////////////////////////////////
 	// checks url params for when route is hit directly
-	app.get('/profile/:username', (req, res) => {
-
-		if (req.user &&
-			 (req.user.local.username === req.params.username &&
-		 		req.isAuthenticated())) {
-			return res.sendFile(path.join(__dirname + '/../../views/profile.html'));	
-		}
-
-		return res.redirect('/');
-	});
+	// app.get('/users/:username',
+	// 	ifLoggedOut,
+	// 	correctUserRouteParams,
+	// 	(req, res) => {
+	// 		return res.sendFile(path.join(__dirname + '/../../views/profile.html'));	
+	// });
 
 	// LOGOUT ///////////////////////////////////////////////////
 	app.get('/logout', (req, res) => {
 		req.logout();
 		res.redirect('/');
 	});
-
 }
 
-function isLoggedIn(req, res, next) {
-	if (req.user && req.isAuthenticated()) {
-		return res.redirect(`/profile/${req.user.local.username}`);	
+function ifLoggedIn(req, res, next) {
+	if (req.isAuthenticated()) {
+		return res.redirect(`/users/${req.user.local.username}`);	
 	}
 	next();
 }
 
+function ifLoggedOut(req, res, next) {
+	if (!req.isAuthenticated()) {
+		return res.redirect('/');
+	}
+	next();
+}

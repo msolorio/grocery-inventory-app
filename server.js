@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 
 //////////////////////////////////////////////////
 // SETUP
@@ -27,7 +27,7 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser());
 
-app.use('/profile', express.static('public/profile'));
+app.use('/users', express.static('public/profile'));
 
 app.set('view engine', 'ejs');
 
@@ -37,7 +37,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-require('./app/routes/routes')(app, passport);
+require('./app/routes')(app, passport);
 
 let server;
 
