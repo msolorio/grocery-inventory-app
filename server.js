@@ -1,47 +1,53 @@
-'use strict';
+// 'use strict';
 
+//////////////////////////////////////////////////
+// SETUP
+//////////////////////////////////////////////////
 require('dotenv').config();
 const express = require('express');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
 const app = express();
-const userRouter = require('./routes/usersRouter');
-const path = require('path');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const morgan = require('morgan');
 
+const passport = require('passport');
+const flash = require('connect-flash');
+
+
+//////////////////////////////////////////////////
+// CONFIGURATION
+//////////////////////////////////////////////////
 mongoose.Promise = global.Promise;
 
-app.use('/css', express.static('public/css'));
-app.use('/js', express.static('public/js'));
-app.use('/images', express.static('public/images'));
+require('./config/passport')(passport);
 
-// app.get('/', (req, res) => {
-//   res.sendFile(`${__dirname}/index.html`);
-// });
+app.use(morgan('dev'));
+app.use(cookieParser());
+app.use(bodyParser());
 
-app.use('/login', (req, res) => {
-  res.sendFile(`${__dirname}/login.html`);
-});
+app.use('/profile', express.static('public/profile'));
 
-app.use('/users', userRouter);
+app.set('view engine', 'ejs');
 
-// userRouter.js
-// app.use('/items/:item_id', itemsRouter);
+// PASSPORT
+app.use(session({secret: process.env.SESSION_SECRET}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
-// app.get('*', (req, res) => {
-//   res.status(404).json({message: 'resource not found'});
-// });
+require('./app/routes/routes')(app, passport);
 
 let server;
 
 function runServer(databaseUrl, port) {
   return new Promise((resolve, reject) => {
     mongoose.connect(databaseUrl, (err) => {
-      if (err) {
-        return reject(err);
-      }
+      if (err) return reject(err);
     });
     server = app.listen(port, () => {
-      console.log(`server listening on port: ${port}`);
+      console.log(`your server running on port: ${port}\n...you better go and catch it.`);
       return resolve();
     })
     .on('error', (err) => {
@@ -53,7 +59,7 @@ function runServer(databaseUrl, port) {
 
 function closeServer() {
   return new Promise((resolve, reject) => {
-    console.log(`Closing server`);
+    console.log(`closing server`);
     server.close((err) => {
       if (err) return reject(err);
 
@@ -62,12 +68,12 @@ function closeServer() {
   });
 }
 
-// if file is run directly by calling node server js
-// we call runServer
+// if file is run directly, run server
 if (require.main === module) {
   runServer(process.env.DATABASE_URL, process.env.PORT).catch((err) => {
     console.error('error:', err);
   });
 }
 
+// available for tests
 module.exports = { app, runServer, closeServer };
