@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const itemsRouter = require('./itemsRouter');
 
+// corrects username in route based on username from cookie
 function correctUserRouteParams(req, res, next) {
 	if (req.user.local.username !== req.params.username) {
 		
@@ -22,7 +23,7 @@ function ifLoggedOut(req, res, next) {
 	next();
 }
 
-module.exports = function(app, passport) {
+module.exports = function(passport) {
 
 	const router = express.Router();
 
