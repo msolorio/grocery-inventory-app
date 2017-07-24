@@ -1,5 +1,6 @@
 // 'use strict';
 
+// const flash = require('connect-flash');
 const path = require('path');
 
 module.exports = function(app, passport) {
@@ -27,7 +28,7 @@ module.exports = function(app, passport) {
 			req.login(user, (loginErr) => {
 				if (loginErr) return next(loginErr);
 
-				res.redirect(`/profile/${user.local.username}`);
+				res.redirect(`/users/${user.local.username}`);
 			});
 		})(req, res, next);
 
@@ -49,7 +50,7 @@ module.exports = function(app, passport) {
 			req.login(user, (loginErr) => {
 				if (loginErr) return next(loginErr);
 
-				res.redirect(`/profile/${user.local.username}`);
+				res.redirect(`/users/${user.local.username}`);
 			});
 		})(req, res, next);
 
@@ -57,7 +58,7 @@ module.exports = function(app, passport) {
 
 	// PROFILE PAGE /////////////////////////////////////////////
 	// checks url params for when route is hit directly
-	app.get('/profile/:username', (req, res) => {
+	app.get('/users/:username', (req, res) => {
 
 		if (req.user &&
 			 (req.user.local.username === req.params.username &&
@@ -78,7 +79,7 @@ module.exports = function(app, passport) {
 
 function isLoggedIn(req, res, next) {
 	if (req.user && req.isAuthenticated()) {
-		return res.redirect(`/profile/${req.user.local.username}`);	
+		return res.redirect(`/users/${req.user.local.username}`);	
 	}
 	next();
 }
