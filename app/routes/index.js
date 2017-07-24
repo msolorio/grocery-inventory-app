@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 
 // const flash = require('connect-flash');
 const path = require('path');
@@ -6,13 +6,13 @@ const path = require('path');
 module.exports = function(app, passport) {
 
 	// HOMEPAGE ////////////////////////////////////////////////
-	app.get('/', isLoggedIn, (req, res) => {
+	app.get('/', ifLoggedIn, (req, res) => {
 
 		res.sendFile(path.join(__dirname + '/../../views/index.html'));
 	});
 
 	// LOGIN PAGE //////////////////////////////////////////////
-	app.get('/login', isLoggedIn, (req, res) => {
+	app.get('/login', ifLoggedIn, (req, res) => {
 		res.render('login.ejs', { message: req.flash('loginMessage')});
 	});
 
@@ -35,7 +35,7 @@ module.exports = function(app, passport) {
 	});
 
 	// SINGUP PAGE /////////////////////////////////////////////
-	app.get('/signup', isLoggedIn, (req, res) => {
+	app.get('/signup', ifLoggedIn, (req, res) => {
 		res.render('signup.ejs', { message: req.flash('signupMessage')});
 	});
 
@@ -58,15 +58,11 @@ module.exports = function(app, passport) {
 
 	// PROFILE PAGE /////////////////////////////////////////////
 	// checks url params for when route is hit directly
-	app.get('/users/:username', (req, res) => {
-
-		if (req.user &&
-			 (req.user.local.username === req.params.username &&
-		 		req.isAuthenticated())) {
+	app.get('/users/:username',
+		ifLoggedOut,
+		correctUserRouteParams,
+		(req, res) => {
 			return res.sendFile(path.join(__dirname + '/../../views/profile.html'));	
-		}
-
-		res.redirect('/');
 	});
 
 	// LOGOUT ///////////////////////////////////////////////////
@@ -74,13 +70,29 @@ module.exports = function(app, passport) {
 		req.logout();
 		res.redirect('/');
 	});
-
 }
 
-function isLoggedIn(req, res, next) {
-	if (req.user && req.isAuthenticated()) {
-		return res.redirect(`/users/${req.user.local.username}`);	
+function directToProfile(req, res) {
+	return res.redirect(`/users/${req.user.local.username}`);
+}
+
+function correctUserRouteParams(req, res, next) {
+	if (req.user.local.username !== req.params.username) {
+		directToProfile(req, res);
 	}
 	next();
 }
 
+function ifLoggedIn(req, res, next) {
+	if (req.isAuthenticated()) {
+		directToProfile(req, res);	
+	}
+	next();
+}
+
+function ifLoggedOut(req, res, next) {
+	if (!req.isAuthenticated()) {
+		return res.redirect('/');
+	}
+	next();
+}
