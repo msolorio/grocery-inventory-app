@@ -19,14 +19,13 @@ const UserSchema = mongoose.Schema({
   }]
 });
 
-// UserSchema.methods.apiRepr = function() {
-//   return {
-//     id: this._id,
-//     username: this.username,
-//     password: this.password,
-//     items: this.items
-//   };
-// };
+UserSchema.methods.apiRepr = function() {
+  return {
+    id: this.id,
+    local: this.local,
+    items: this.items
+  };
+};
 
 UserSchema.methods.getItems = function() {
   return this.items;
@@ -43,5 +42,3 @@ UserSchema.methods.validPassword = function(password) {
 const User = mongoose.model('User', UserSchema);
 
 module.exports = User;
-
-

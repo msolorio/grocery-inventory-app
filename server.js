@@ -23,7 +23,7 @@ mongoose.Promise = global.Promise;
 
 require('./config/passport')(passport);
 
-app.use(morgan('dev'));
+app.use(morgan('common'));
 app.use(cookieParser());
 app.use(bodyParser());
 
@@ -39,6 +39,7 @@ app.use(flash());
 
 require('./app/routes')(app, passport);
 
+// for runServer and closeServer
 let server;
 
 function runServer(databaseUrl, port) {
