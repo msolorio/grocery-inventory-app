@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../models/user');
+const { User, Item } = require('../models/user');
 const router = express.Router({mergeParams: true});
 
 router.get('/', (req, res) => {
@@ -26,23 +26,68 @@ router.post('/', (req, res) => {
 		.findById(req.user.id)
 		.exec()
 		.then((user) => {
-			user.items.push(newItem);
+			user.items.unshift(newItem);
 
 			return user;
 		})
 		.then((updatedUserClone) => {
-			User
+			return User
 				.findByIdAndUpdate(req.user.id, {$set: updatedUserClone}, {new: true})
-				.exec()
-				.then((updatedUser) => {
-					res.status(200).json({items: updatedUser.getItems()});
-				});
+		})
+		.then((updatedUser) => {
+			res.status(200).json({items: updatedUser.getItems()});
 		})
 		.catch((err) => {
 			console.error('error:', err);
 			res.status(500).json({message: `The server encountered an error updating items for user with id: ${req.user.id}`})
 		});
 
+});
+
+router.put('/:itemid', (req, res) => {
+
+	const updateItem = req.body;
+	// validate if req.body.id matches req.params.id
+
+	User
+		.findOneAndUpdate(
+			{ _id: req.user.id, "items._id": req.params.itemid },
+			{ $set: {"items.$": updateItem} }, {new: true})
+		.exec()
+		.then((updatedUser) => {
+			res.json({items: updatedUser.getItems()});
+		})
+		.catch((err) => {
+			console.error('error:', err);
+			res.status(500).json({message: `The server encountered an error updating your item with id: ${req.params.itemid}`});
+		});
+
+});
+
+router.delete('/:itemid', (req, res) => {
+
+	User
+		.findById(req.user.id)
+		.exec()
+		.then((user) => {
+			filteredItems = user.items.filter((item) => {
+				return item.id !== req.params.itemid;
+			});
+
+			user.items = filteredItems;
+			return user;
+		})
+		.then((updatedUserClone) => {
+			return User
+				.findByIdAndUpdate(req.user.id, {$set: updatedUserClone}, {new: true})
+		})
+		.then((user) => {
+			res.status(200).json({items: user.items});
+		})
+		.catch((err) => {
+			console.error('error:', err);
+			res.status(500).json({message: `The server encountered an error deleting your item with id: ${req.params.itemid}`});
+		});
 });
 
 module.exports = router;
