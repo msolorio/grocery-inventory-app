@@ -3,20 +3,22 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 
+const ItemSchema = mongoose.Schema({
+  itemName: String,
+  targetAmount: Number,
+  currentAmount: Number,
+  unitName: String,
+  stepVal: Number,
+  location: String,
+  image: String
+});
+
 const UserSchema = mongoose.Schema({
 	local: {
 		username: String,
   	password: String,
 	},
-  items: [{
-    itemName: String,
-    targetAmount: Number,
-    currentAmount: Number,
-    unitName: String,
-    stepVal: Number,
-    location: String,
-    image: String
-  }]
+  items: [ItemSchema]
 });
 
 UserSchema.methods.apiRepr = function() {
@@ -40,5 +42,6 @@ UserSchema.methods.validPassword = function(password) {
 };
 
 const User = mongoose.model('User', UserSchema);
+const Item = mongoose.model('Item', ItemSchema);
 
-module.exports = User;
+module.exports = { User, Item };
