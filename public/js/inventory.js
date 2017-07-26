@@ -63,7 +63,7 @@ function renderItems(items) {
 
   var result = items.reduce(function(resultStr, item, index) {
     return resultStr + (
-      '<div class="col">' +
+      '<div class="col col-card">' +
         '<div class="card">' +
           '<div class="edit" data-cardnum=' + index + '>Edit</div>' +
           '<div class="remove js-remove" data-cardnum=' + index + '>X</div>' +
@@ -71,12 +71,16 @@ function renderItems(items) {
           '<img class="image" src=' + item.image + ' alt="" title=""/>' +
           '<div class="amountChanger">' +
             '<img class="decrementor js-decrementor" data-cardnum=' + index + ' src="images/left-arrow.svg">' +
-            '<span class="amountContainer">' +
-              '<span>' + item.currentAmount + ' </span>' +
-              '<span>/ </span>' +
-              '<span>' + item.targetAmount + ' </span>' +
-              '<span>' + item.unitName + '</span>' +
-            '</span>' +
+            '<div class="amountContainer">' +
+              '<div class="amount"' +
+                '<span>' + item.currentAmount + ' </span>' +
+                '<span>/ </span>' +
+                '<span>' + item.targetAmount + ' </span>' +
+              '</div>' +
+              '<div>' +
+                item.unitName +
+              '</div>' +
+            '</div>' +
             '<img class="incrementor js-incrementor" data-cardnum=' + index + ' src="images/right-arrow.svg">' +
           '</div>' +
         '</div>' +

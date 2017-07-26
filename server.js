@@ -27,7 +27,7 @@ app.use(morgan('common'));
 app.use(cookieParser());
 app.use(bodyParser());
 
-app.use('/users', express.static('public/profile'));
+app.use('/users', express.static('public'));
 
 app.set('view engine', 'ejs');
 
