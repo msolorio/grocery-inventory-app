@@ -4,7 +4,10 @@ console.log('in inventory js');
 ///////////////////////////////////////////////
 // STATE
 ///////////////////////////////////////////////
+// set to window for dev
 window.state = {
+  username: '',
+  items: []
 };
 
 // simulates data from initial GET request
@@ -48,15 +51,36 @@ var MOCK_ITEMS_DATA = {
 // INVENTORY SCREEN
 ///////////////////////////////////////////////////////////
 
-function getItems(renderItems) {
+/**
+ * Returns username from url
+ */
+function getUsername() {
+  var path = location.pathname;
+  var pathArray = path.split('/');
+  return pathArray[pathArray.length - 1];
+}
 
-  // simulates GET request for all items
-  // /api/users/:user_id/items
-  setTimeout(function() {
-    state.items = MOCK_ITEMS_DATA.items;
+/**
+ * Makes request to retrieve user's items
+ * Calls a callback sending in retrieved data
+ * @param {function} renderItems 
+ */
+function getItems(callback) {
+  var username = getUsername();
+  var settings = {
+    type: 'GET',
+    url: '/users/' + username + '/items',
+    dataType: 'json'
+  }
 
-    renderItems(state.items);
-  }, 0);
+  $.ajax(settings)
+    .done(function(data) {
+      state.items = data.items;
+      callback(state.items);
+    })
+    .fail(function(err) {
+      console.error('error:', err);
+    });
 }
 
 function renderItems(items) {
