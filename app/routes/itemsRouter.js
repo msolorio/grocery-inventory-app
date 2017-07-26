@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
 				.findByIdAndUpdate(req.user.id, {$set: updatedUserClone}, {new: true})
 		})
 		.then((updatedUser) => {
-			res.status(200).json({items: updatedUser.getItems()});
+			res.status(201).json({newItem: updatedUser.items[0]});
 		})
 		.catch((err) => {
 			console.error('error:', err);
@@ -55,7 +55,12 @@ router.put('/:itemid', (req, res) => {
 			{ $set: {"items.$": updateItem} }, {new: true})
 		.exec()
 		.then((updatedUser) => {
-			res.json({items: updatedUser.getItems()});
+			return updatedUser.items.find((item) => {
+				return item.id === req.params.itemid;
+			});
+		})
+		.then((updatedItem) => {
+			res.status(200).json({updatedItem: updatedItem});
 		})
 		.catch((err) => {
 			console.error('error:', err);
@@ -82,7 +87,7 @@ router.delete('/:itemid', (req, res) => {
 				.findByIdAndUpdate(req.user.id, {$set: updatedUserClone}, {new: true})
 		})
 		.then((user) => {
-			res.status(200).json({items: user.items});
+			res.status(200).json({message: `Your item with id: ${req.params.itemid} was successfully removed`});
 		})
 		.catch((err) => {
 			console.error('error:', err);
