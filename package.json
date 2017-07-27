@@ -2,6 +2,10 @@
   "name": "grocery-app",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "6.11.1",
+    "npm": "3.10.10"
+  },
   "main": "server.js",
   "dependencies": {
     "bcrypt-nodejs": "latest",
