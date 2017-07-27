@@ -65,8 +65,7 @@ function getUsername() {
  * Calls a callback sending in retrieved data
  * @param {function} renderItems 
  */
-function getItems(callback) {
-  var username = getUsername();
+function getItems(username, callback) {
   var settings = {
     type: 'GET',
     url: '/users/' + username + '/items',
@@ -79,6 +78,7 @@ function getItems(callback) {
       callback(state.items);
     })
     .fail(function(err) {
+      console.log('there was an error getting all of your items');
       console.error('error:', err);
     });
 }
@@ -186,6 +186,9 @@ function parseDecimal(string) {
 ///////////////////////////////////////////////////////////
 // ADD ITEM SCREEN
 ///////////////////////////////////////////////////////////
+
+// TODO: validate inputs
+// check content lengths, types, required
 function getNewItemData() {
   var newItem = {};
   newItem.itemName = $('.js-itemName').val();
@@ -208,24 +211,39 @@ function clearForm() {
   $('.js-location').val('');
 }
 
-// adding an item
-function addItem(renderItems) {
+/**
+ * makes POST request to send new item data
+ * pass new item data to renderItem
+ * @param {function} callback 
+ */
+function addItem(username, callback) {
+  var newItem = getNewItemData();
 
-  // simulates POST request to create new item
-  // /api/users/:user_id/items
-  setTimeout(function() {
-    var newItem = getNewItemData();
-    state.items.unshift(newItem);
-    renderItems(state.items);
+  var settings = {
+    type: 'POST',
+    url: '/users/' + username + '/items',
+    data: newItem,
+    dataType: 'json',
+    contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
+  }
 
-    clearForm();
-  }, 0);
+  $.ajax(settings)
+  .done(function(data) {
+    console.log(data);
+    state.items.unshift(data.newItem);
+    callback(state.items);
+  })
+  .fail(function(err) {
+    console.log('there was an error adding a new item.');
+    console.log('error:', err);
+  });
+  
 }
 
 function listenForAddItem() {
   $('.js-addItemButton').click(function(event) {
     event.preventDefault();
-    addItem(renderItems);
+    addItem(state.username, renderItems);
   });
 }
 
@@ -337,8 +355,9 @@ function listenForListItemClick() {
 // ON LOAD
 ///////////////////////////////////////////////////////////
 $(function() {
-
-  getItems(renderItems);
+  state.username = getUsername();
+  
+  getItems(state.username, renderItems);
 
   listenForAddItem();
   listenForDecrementorClick();
