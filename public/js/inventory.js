@@ -118,38 +118,69 @@ function renderItems(items) {
   generateLists(renderLists);
 }
 
-function decrementItem(itemNum, renderItems) {
-  // simulates PUT request
-  // /api/users/:user_id/items/:item_id
-  setTimeout(function() {
-    state.items[itemNum].currentAmount -= state.items[itemNum].stepVal;
+function decrementItem(username, itemIndex, callback) {
+  var updatedItem = state.items[itemIndex];
+  var itemId = updatedItem._id;
+  var stepVal = updatedItem.stepVal;
+  state.items[itemIndex].currentAmount -= stepVal;
 
-    renderItems(state.items);
-  }, 0); 
+  var settings = {
+    type: 'PUT',
+    url: '/users/' + username + '/items/' + itemId,
+    data: updatedItem,
+    dataType: 'json',
+    contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
+  }
+
+  $.ajax(settings)
+  .done(function(data) {
+    console.log(data);
+    state.items[itemIndex] = data.updatedItem;
+    callback(state.items);
+  })
+  .fail(function(err) {
+    console.log('there was an error adding a new item.');
+    console.log('error:', err);
+  });
 }
 
 function listenForDecrementorClick() {
   $('.js-itemsRow').on('click', '.js-decrementor', function(event) {
-      var itemNum = $(event.target).data('cardnum');
-      decrementItem(itemNum, renderItems);
+      var itemIndex = $(event.target).data('cardnum');
+      decrementItem(state.username, itemIndex, renderItems);
   });
 }
 
-function incrementItem(itemNum, renderItems) {
-  // simulates PUT request to update grocery item
-  // /api/users/:user_id/items/:item_id
-  setTimeout(function() {
+function incrementItem(username, itemIndex, callback) {
+  var updatedItem = state.items[itemIndex];
+  var itemId = updatedItem._id;
+  var stepVal = updatedItem.stepVal;
+  state.items[itemIndex].currentAmount += stepVal;
 
-    state.items[itemNum].currentAmount += state.items[itemNum].stepVal;
+  var settings = {
+    type: 'PUT',
+    url: '/users/' + username + '/items/' + itemId,
+    data: updatedItem,
+    dataType: 'json',
+    contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
+  }
 
-    renderItems(state.items);
-  }, 0);
+  $.ajax(settings)
+  .done(function(data) {
+    console.log(data);
+    state.items[itemIndex] = data.updatedItem;
+    callback(state.items);
+  })
+  .fail(function(err) {
+    console.log('there was an error adding a new item.');
+    console.log('error:', err);
+  });
 }
 
 function listenForIncrementorClick() {
   $('.js-itemsRow').on('click', '.js-incrementor', function(event) {
-      var itemNum = $(event.target).data('cardnum');
-      incrementItem(itemNum, renderItems);
+      var itemIndex = $(event.target).data('cardnum');
+      incrementItem(state.username, itemIndex, renderItems);
   });
 }
 
