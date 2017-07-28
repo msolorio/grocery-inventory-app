@@ -2,3 +2,10 @@ language: node_js
 node_js: node
 services:
 - mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: evEMACCg8MXkWe4GdVcsnAhan6W4LPHD7RLJnprUpMYf5av3tTcFvCzteoe5n/98FxBDvJYrU1h1zHH0ms7b6DR1foIAD2ktiTgf/ntFQNIgOKHpjgZ/WdTunlrkGx+cFxnEkINwMqvazKJSOKvDMfU4fEBxYEwA9RcVzwrmgx2OF910EofeGShLzgIX6vn3J3bCIKxfbqqKvU/NA8VrHaU7PGr/T/0NWsSn5vFjyYoXcMngIBfk8Y0RSmQIEMMyceKXrdWOyj8YqA6crclqEGrlJDBvHixHts8rI6lFlwOitDtbnLT1ZdjoDJED7rkjrnYOkkTyL5e0+lQG32UlZujZ6XMdrhM1avd9ZQQMHtH6LU7nzGbVxvtIEj8JFdCQfe7XV9nPLfUs8su0jfSxam9r7zKl7Q+eZ+m3iUt8PG9DYHQlFH5SEzxJvQcJIX2Vpg+L7i7cfQv+XQXm1MflPyrNvJ47CoAKaCKwmhWP8W8NWjMNeYzOeMEhnE4ThcQWiWb0hvlrv1q1TlPPVhmFTEd+KGsGQTtjhinq/yuPp6Vw7ondGu80VH7UUecqHJbeHdQna9WtVRgEgVSaW5HrcPhOxDCfpKYy8FvtRvY/aLgix7ehz6pmEuEpJu1chLlKgS2QzFOqaV/ERZWpZZdX0gGDEIGHoadW2Y+m/ttSc+s=
+  app: cryptic-depths-79050
+  on:
+    repo: msolorio/grocery-inventory-app
