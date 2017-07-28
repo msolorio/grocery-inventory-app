@@ -60,29 +60,6 @@ function getUsername() {
   return pathArray[pathArray.length - 1];
 }
 
-/**
- * Makes request to retrieve user's items
- * Calls a callback sending in retrieved data
- * @param {function} renderItems 
- */
-function getItems(username, callback) {
-  var settings = {
-    type: 'GET',
-    url: '/users/' + username + '/items',
-    dataType: 'json'
-  }
-
-  $.ajax(settings)
-    .done(function(data) {
-      state.items = data.items;
-      callback(state.items);
-    })
-    .fail(function(err) {
-      console.log('there was an error getting all of your items');
-      console.error('error:', err);
-    });
-}
-
 function renderItems(items) {
 
   var result = items.reduce(function(resultStr, item, index) {
@@ -116,6 +93,29 @@ function renderItems(items) {
 
   // TODO: will be called when switching to list view
   generateLists(renderLists);
+}
+
+/**
+ * Makes request to retrieve user's items
+ * Calls a callback sending in retrieved data
+ * @param {function} renderItems 
+ */
+function getItems(username, callback) {
+  var settings = {
+    type: 'GET',
+    url: '/users/' + username + '/items',
+    dataType: 'json'
+  }
+
+  $.ajax(settings)
+    .done(function(data) {
+      state.items = data.items;
+      callback(state.items);
+    })
+    .fail(function(err) {
+      console.log('there was an error getting all of your items');
+      console.error('error:', err);
+    });
 }
 
 function decrementItem(username, itemIndex, callback) {
@@ -184,22 +184,32 @@ function listenForIncrementorClick() {
   });
 }
 
-function removeItem(itemNum, renderItems) {
+function removeItem(username, itemIndex, callback) {
+  var itemToRemove = state.items[itemIndex];
+  var itemId = itemToRemove._id;
 
-  // simulates DELETE request
-  // /api/users/:user_id/items/:item_id
-  setTimeout(function() {
-    state.items.splice(itemNum, 1);
+  var settings = {
+    type: 'DELETE',
+    url: '/users/' + username + '/items/' + itemId,
+    dataType: 'json'
+  }
 
-    renderItems(state.items);
-  }, 300);
-  
+  $.ajax(settings)
+    .done(function(data) {
+      console.log(data);
+      state.items = data.items;
+      callback(state.items);
+    })
+    .fail(function(err) {
+      console.log('there was an error adding a new item.');
+      console.log('error:', err);
+    });
 }
 
 function listenForDeleteClick() {
   $('.js-itemsRow').on('click', '.js-remove', function(event) {
-    var itemNum = $(event.target).data('cardnum');
-    removeItem(itemNum, renderItems);
+    var itemIndex = $(event.target).data('cardnum');
+    removeItem(state.username, itemIndex, renderItems);
   });
 }
 
