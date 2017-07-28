@@ -66,7 +66,6 @@ function renderItems(items) {
     return resultStr + (
       '<div class="col col-card">' +
         '<div class="card">' +
-          '<div class="edit" data-cardnum=' + index + '>Edit</div>' +
           '<div class="remove js-remove" data-cardnum=' + index + '>X</div>' +
           '<h3 class="itemName">' + item.itemName + '</h3>' +
           '<img class="image" src=' + item.image + ' alt="" title=""/>' +
