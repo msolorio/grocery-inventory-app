@@ -6,41 +6,9 @@ console.log('in inventory js');
 ///////////////////////////////////////////////
 // set to window for dev
 window.state = {
+  currentView: 'inventory',
   username: '',
   items: []
-};
-
-// simulates data from initial GET request
-var MOCK_ITEMS_DATA = {
-  items: [
-    {
-      itemName: "Spinach",
-      currentAmount: 2,
-      targetAmount: 2,
-      unitName: "tubs",
-      stepVal: 0.25,
-      location: "Sprouts",
-      image: "images/salad.svg"
-    },
-    {
-      "itemName": "Bananas",
-      currentAmount: 4,
-      targetAmount: 10,
-      unitName: "bananas",
-      stepVal: 1,
-      location: "Costco",
-      image: "images/salad.svg"
-    },
-    {
-      "itemName": "Avocados",
-      currentAmount: 4,
-      targetAmount: 10,
-      unitName: "avs",
-      stepVal: 1,
-      location: "Sprouts",
-      image: "images/salad.svg"
-    }
-  ]
 };
 
 ///////////////////////////////////////////////////////////
@@ -50,6 +18,14 @@ var MOCK_ITEMS_DATA = {
 ///////////////////////////////////////////////////////////
 // INVENTORY SCREEN
 ///////////////////////////////////////////////////////////
+
+function renderView(viewToShow) {
+    $('.js-addItem').css('display', 'none');
+    $('.js-inventory').css('display', 'none');
+    $('.js-lists').css('display', 'none');
+
+    $('.js-' + viewToShow).css('display', 'block');
+}
 
 /**
  * Returns username from url
@@ -387,6 +363,13 @@ function listenForListItemClick() {
   });
 }
 
+function listenForNavButtonClick() {
+  $('.js-navButton').click(function(event) {
+    var viewClicked = $(event.target).data('view');
+    renderView(viewClicked);
+  });
+}
+
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -396,9 +379,10 @@ function listenForListItemClick() {
 ///////////////////////////////////////////////////////////
 $(function() {
   state.username = getUsername();
-  
-  getItems(state.username, renderItems);
 
+  getItems(state.username, renderItems);
+  renderView('inventory');
+  listenForNavButtonClick();
   listenForAddItem();
   listenForDecrementorClick();
   listenForIncrementorClick();

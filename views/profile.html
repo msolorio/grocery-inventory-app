@@ -9,7 +9,18 @@
 </head>
 <body>
 
-<div class="addItem">
+<div class="navigation">
+  <div class="container">
+    <div class="navButton js-navButton navButton-addItem js-navButton-addItem"
+         data-view="addItem">Add an Item</div>
+    <div class="navButton js-navButton navButton-inventory js-navButton-inventory"
+         data-view="inventory">Current Inventory</div>
+    <div class="navButton js-navButton navButton-lists js-navButton-lists"
+         data-view="lists">Show Lists</div>
+  </div>
+</div>
+
+<div class="addItem js-addItem">
   <div class="container">
     <form action="" class="form">
       <h2 class="headline">Add Item</h2>
@@ -48,22 +59,22 @@
   </div>
 </div>
 
-<div class="inventory">
+<div class="inventory js-inventory">
   <div class="container">
-    <h2 class="headline">Current Inventory</h2>
+    <div class="headlineWrap">
+      <h2 class="headline">Current Inventory</h2>
+    </div>
     <div class="items">
       <div class="js-itemsRow row"></div>
     </div>
   </div>
 </div>
 
-<div class="lists">
+<div class="lists js-lists">
   <div class="container">
     <div class="listsContainer">
       <h2 class="headline">Grocery Lists</h2>
-      <div class="lists">
-        <div class="js-listsRow row"></div>
-      </div>
+      <div class="listRow js-listsRow row"></div>
     </div>
   </div>
 </div>
