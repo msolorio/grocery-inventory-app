@@ -1,4 +1,3 @@
-console.log('in inventory js');
 
 (function() {
 ///////////////////////////////////////////////
@@ -8,7 +7,8 @@ console.log('in inventory js');
 window.state = {
   currentView: 'inventory',
   username: '',
-  items: []
+  items: [],
+  clickVal: 0
 };
 
 ///////////////////////////////////////////////////////////
@@ -26,11 +26,9 @@ function renderView(viewToShow) {
 
     switch(viewToShow) {
       case 'lists':
-        console.log('in lists view');
         generateLists(renderLists);
         break;
       case 'inventory':
-        console.log('in inventory view');
         getItems(state.username, renderItems);
         break;
     }
@@ -109,78 +107,45 @@ function getItems(username, callback) {
     });
 }
 
-function renderItemAmount(itemIndex, updatedAmount) {
+function updateServer(username, itemIndex) {
+  var updateItem = state.items[itemIndex];
+  var itemId = updateItem._id;
+
+  var settings = {
+    type: 'PUT',
+    url: '/users/' + username + '/items/' + itemId,
+    data: state.items[itemIndex],
+    dataType: 'json',
+    async: true,
+    contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
+  }
+  console.log('PUT request initiated');
+  $.ajax(settings)
+    .done(function(data) {
+      state.items[itemIndex] = data.updatedItem;
+      state.clickVal = 0;
+      console.log('PUT request completed successfully');
+    })
+    .fail(function(err) {
+      console.log('there was an error updating your item.');
+      console.log('error:', err);
+
+      renderItemAmount(itemIndex, (state.items[itemIndex].currentAmount - (stepVal * clickVal)));
+    });
+}
+
+function decrementItem(itemIndex) {
+  var updateItem = state.items[itemIndex];
+  var updatedAmount = state.items[itemIndex].currentAmount -= updateItem.stepVal;
+  state.clickVal--;
   $('.js-currentAmount-' + itemIndex).html(updatedAmount + ' ');
 }
 
-function decrementItem(username, itemIndex, renderItemAmount) {
-  var updatedItem = state.items[itemIndex];
-  var itemId = updatedItem._id;
-  var stepVal = updatedItem.stepVal;
-  var updatedAmount = state.items[itemIndex].currentAmount -= stepVal;
-
-  var settings = {
-    type: 'PUT',
-    url: '/users/' + username + '/items/' + itemId,
-    data: updatedItem,
-    dataType: 'json',
-    async: true,
-    contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
-  }
-
-  renderItemAmount(itemIndex, updatedAmount);
-
-  $.ajax(settings)
-    .done(function(data) {
-      console.log(data);
-      state.items[itemIndex] = data.updatedItem;
-    })
-    .fail(function(err) {
-      console.log('there was an error updating your item.');
-      console.log('error:', err);
-    });
-}
-
-function listenForDecrementorClick() {
-  $('.js-itemsRow').on('click', '.js-decrementor', function(event) {
-      var itemIndex = $(event.target).data('cardnum');
-      decrementItem(state.username, itemIndex, renderItemAmount);
-  });
-}
-
-function incrementItem(username, itemIndex, renderItemAmount) {
-  var updatedItem = state.items[itemIndex];
-  var itemId = updatedItem._id;
-  var stepVal = updatedItem.stepVal;
-  var updatedAmount = state.items[itemIndex].currentAmount += stepVal;
-
-  var settings = {
-    type: 'PUT',
-    url: '/users/' + username + '/items/' + itemId,
-    data: updatedItem,
-    dataType: 'json',
-    async: true,
-    contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
-  }
-
-  renderItemAmount(itemIndex, updatedAmount);
-
-  $.ajax(settings)
-    .done(function(data) {
-      console.log(data);
-      state.items[itemIndex] = data.updatedItem;
-    })
-    .fail(function(err) {
-      console.log('there was an error updating your item.');
-      console.log('error:', err);
-    });
-}
-
-function listenForIncrementorClick() {
-  $('.js-itemsRow').on('click', '.js-incrementor', function(event) {
-      var itemIndex = $(event.target).data('cardnum');
-      incrementItem(state.username, itemIndex, renderItemAmount);
-  });
+function incrementItem(itemIndex) {
+  var updateItem = state.items[itemIndex];
+  var updatedAmount = state.items[itemIndex].currentAmount += updateItem.stepVal;
+  state.clickVal++;
+  $('.js-currentAmount-' + itemIndex).html(updatedAmount + ' ');
 }
 
 function removeItem(username, itemIndex, callback) {
@@ -203,13 +168,6 @@ function removeItem(username, itemIndex, callback) {
       console.log('there was an error adding a new item.');
       console.log('error:', err);
     });
-}
-
-function listenForDeleteClick() {
-  $('.js-itemsRow').on('click', '.js-remove', function(event) {
-    var itemIndex = $(event.target).data('cardnum');
-    removeItem(state.username, itemIndex, renderItems);
-  });
 }
 
 ///////////////////////////////////////////////
@@ -368,6 +326,13 @@ function checkOffListItem(listItemLocation, listItemNum, itemName) {
   generateLists(renderLists);
 }
 
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+// EVENT LISTENERS
+///////////////////////////////////////////////////////////////////////////
 function listenForListItemClick() {
   $('.js-listsRow').on('click', '.js-listItem', function(event) {
       event.target = this;
@@ -385,6 +350,37 @@ function listenForNavButtonClick() {
     var viewClicked = $(event.target).data('view');
     renderView(viewClicked);
   });
+}
+
+function listenForDeleteClick() {
+  $('.js-itemsRow').on('click', '.js-remove', function(event) {
+    var itemIndex = $(event.target).data('cardnum');
+    removeItem(state.username, itemIndex, renderItems);
+  });
+}
+
+function listenForDecrementorClick() {
+  $('.js-itemsRow').on('click', '.js-decrementor', function(event) {
+      var itemIndex = $(event.target).data('cardnum');
+      decrementItem(itemIndex);
+  });
+
+  $('.js-itemsRow').on('click', '.js-decrementor', $.debounce(1000, function(event) {
+      var itemIndex = $(event.target).data('cardnum');
+      updateServer(state.username, itemIndex);
+  }));
+}
+
+function listenForIncrementorClick() {
+  $('.js-itemsRow').on('click', '.js-incrementor', function(event) {
+    var itemIndex = $(event.target).data('cardnum');
+    incrementItem(itemIndex);
+  });
+
+  $('.js-itemsRow').on('click', '.js-incrementor', $.debounce(1000, function(event) {
+    var itemIndex = $(event.target).data('cardnum');
+    updateServer(state.username, itemIndex);
+  }));
 }
 
 ///////////////////////////////////////////////////////////
