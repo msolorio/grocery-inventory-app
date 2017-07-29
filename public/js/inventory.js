@@ -24,6 +24,17 @@ function renderView(viewToShow) {
     $('.js-inventory').css('display', 'none');
     $('.js-lists').css('display', 'none');
 
+    switch(viewToShow) {
+      case 'lists':
+        console.log('in lists view');
+        generateLists(renderLists);
+        break;
+      case 'inventory':
+        console.log('in inventory view');
+        getItems(state.username, renderItems);
+        break;
+    }
+
     $('.js-' + viewToShow).css('display', 'block');
 }
 
@@ -44,12 +55,13 @@ function renderItems(items) {
         '<div class="card">' +
           '<div class="remove js-remove" data-cardnum=' + index + '>X</div>' +
           '<h3 class="itemName">' + item.itemName + '</h3>' +
-          '<img class="image" src=' + item.image + ' alt="" title=""/>' +
+          '<div class="imageContainer">' +
+          // '<img class="image" src=' + item.image + ' alt="" title=""/>' +
+          '</div>' +
           '<div class="amountChanger">' +
-            '<img class="decrementor js-decrementor" data-cardnum=' + index + ' src="images/left-arrow.svg">' +
             '<div class="amountContainer">' +
-              '<div class="amount"' +
-                '<span>' + item.currentAmount + ' </span>' +
+              '<div class="amount">' +
+                '<span class="js-currentAmount-' + index + '">' + item.currentAmount + ' </span>' +
                 '<span>/ </span>' +
                 '<span>' + item.targetAmount + ' </span>' +
               '</div>' +
@@ -57,7 +69,14 @@ function renderItems(items) {
                 item.unitName +
               '</div>' +
             '</div>' +
-            '<img class="incrementor js-incrementor" data-cardnum=' + index + ' src="images/right-arrow.svg">' +
+          '</div>' +
+          '<div class="amountArrows">' +
+            '<div class="decrementor js-decrementor" data-cardnum=' + index + '>' +
+              '&#10094;' +
+            '</div>' +
+            '<div class="incrementor js-incrementor" data-cardnum=' + index + '>' +
+              '&#10095;' +
+            '</div>' +
           '</div>' +
         '</div>' +
       '</div>'
@@ -65,9 +84,6 @@ function renderItems(items) {
   }, '');
 
   $('.js-itemsRow').html(result);
-
-  // TODO: will be called when switching to list view
-  generateLists(renderLists);
 }
 
 /**
@@ -93,69 +109,77 @@ function getItems(username, callback) {
     });
 }
 
-function decrementItem(username, itemIndex, callback) {
+function renderItemAmount(itemIndex, updatedAmount) {
+  $('.js-currentAmount-' + itemIndex).html(updatedAmount + ' ');
+}
+
+function decrementItem(username, itemIndex, renderItemAmount) {
   var updatedItem = state.items[itemIndex];
   var itemId = updatedItem._id;
   var stepVal = updatedItem.stepVal;
-  state.items[itemIndex].currentAmount -= stepVal;
+  var updatedAmount = state.items[itemIndex].currentAmount -= stepVal;
 
   var settings = {
     type: 'PUT',
     url: '/users/' + username + '/items/' + itemId,
     data: updatedItem,
     dataType: 'json',
+    async: true,
     contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
   }
 
+  renderItemAmount(itemIndex, updatedAmount);
+
   $.ajax(settings)
-  .done(function(data) {
-    console.log(data);
-    state.items[itemIndex] = data.updatedItem;
-    callback(state.items);
-  })
-  .fail(function(err) {
-    console.log('there was an error adding a new item.');
-    console.log('error:', err);
-  });
+    .done(function(data) {
+      console.log(data);
+      state.items[itemIndex] = data.updatedItem;
+    })
+    .fail(function(err) {
+      console.log('there was an error updating your item.');
+      console.log('error:', err);
+    });
 }
 
 function listenForDecrementorClick() {
   $('.js-itemsRow').on('click', '.js-decrementor', function(event) {
       var itemIndex = $(event.target).data('cardnum');
-      decrementItem(state.username, itemIndex, renderItems);
+      decrementItem(state.username, itemIndex, renderItemAmount);
   });
 }
 
-function incrementItem(username, itemIndex, callback) {
+function incrementItem(username, itemIndex, renderItemAmount) {
   var updatedItem = state.items[itemIndex];
   var itemId = updatedItem._id;
   var stepVal = updatedItem.stepVal;
-  state.items[itemIndex].currentAmount += stepVal;
+  var updatedAmount = state.items[itemIndex].currentAmount += stepVal;
 
   var settings = {
     type: 'PUT',
     url: '/users/' + username + '/items/' + itemId,
     data: updatedItem,
     dataType: 'json',
+    async: true,
     contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
   }
 
+  renderItemAmount(itemIndex, updatedAmount);
+
   $.ajax(settings)
-  .done(function(data) {
-    console.log(data);
-    state.items[itemIndex] = data.updatedItem;
-    callback(state.items);
-  })
-  .fail(function(err) {
-    console.log('there was an error adding a new item.');
-    console.log('error:', err);
-  });
+    .done(function(data) {
+      console.log(data);
+      state.items[itemIndex] = data.updatedItem;
+    })
+    .fail(function(err) {
+      console.log('there was an error updating your item.');
+      console.log('error:', err);
+    });
 }
 
 function listenForIncrementorClick() {
   $('.js-itemsRow').on('click', '.js-incrementor', function(event) {
       var itemIndex = $(event.target).data('cardnum');
-      incrementItem(state.username, itemIndex, renderItems);
+      incrementItem(state.username, itemIndex, renderItemAmount);
   });
 }
 
@@ -333,22 +357,15 @@ function generateLists(renderLists) {
 }
 
 function checkOffListItem(listItemLocation, listItemNum, itemName) {
+  state.lists[listItemLocation].items.splice(listItemNum, 1);
 
-  setTimeout(function() {
-    // simulates HTTP DELETE request remove list item
-    // /api/users/:user_id/lists/:list_item_id
-    state.lists[listItemLocation].items.splice(listItemNum, 1);
+  state.items.forEach(function(item, index) {
+    if (item.itemName === itemName) {
+      state.items[index].currentAmount = state.items[index].targetAmount;
+    }
+  });
 
-    // simulates HTTP PUT request to update item
-    // /api/users/:user_id/items/:item_id
-    state.items.forEach(function(item, index) {
-      if (item.itemName === itemName) {
-        state.items[index].currentAmount = state.items[index].targetAmount;
-      }
-    });
-
-    renderItems(state.items);
-  }, 0);
+  generateLists(renderLists);
 }
 
 function listenForListItemClick() {
@@ -380,7 +397,7 @@ function listenForNavButtonClick() {
 $(function() {
   state.username = getUsername();
 
-  getItems(state.username, renderItems);
+  // getItems(state.username, renderItems);
   renderView('inventory');
   listenForNavButtonClick();
   listenForAddItem();

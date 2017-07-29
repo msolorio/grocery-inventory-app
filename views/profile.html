@@ -9,74 +9,78 @@
 </head>
 <body>
 
-<div class="navigation">
-  <div class="container">
-    <div class="navButton js-navButton navButton-addItem js-navButton-addItem"
-         data-view="addItem">Add an Item</div>
-    <div class="navButton js-navButton navButton-inventory js-navButton-inventory"
-         data-view="inventory">Current Inventory</div>
-    <div class="navButton js-navButton navButton-lists js-navButton-lists"
-         data-view="lists">Show Lists</div>
-  </div>
-</div>
+<div class="appContainer">
 
-<div class="addItem js-addItem">
-  <div class="container">
-    <form action="" class="form">
-      <h2 class="headline">Add Item</h2>
-      <div class="formGroup">
-        <label class="label" for="itemName">Item Name</label>
-        <input class="textInput js-itemName" type="text" id="itemName">
-      </div>
-
-      <div class="formGroup targetAmountGroup">
-        <label class="label" for="targetAmount">Target Amount</label>
-        <input class="textInput js-targetAmount" type="text" id="targetAmount">
-      </div>
-
-      <div class="formGroup currentAmountGroup">
-        <label class="label" for="currentAmount">Current Amount</label>
-        <input class="textInput js-currentAmount" type="text" id="currentAmount">
-      </div>
-
-      <div class="formGroup unitNameGroup">
-        <label class="label" for="unitName">Unit Name</label>
-        <input class="textInput js-unitName" type="text" id="unitName">
-      </div>
-
-      <div class="formGroup stepValGroup">
-        <label class="label" for="stepVal">Step Value</label>
-        <input class="textInput js-stepVal" type="text" id="stepVal">
-      </div>
-
-      <div class="formGroup">
-        <label class="label" for="location">Location</label>
-        <input class="textInput js-location" type="text" id="location">
-      </div>
-
-      <button class="button js-addItemButton">Submit</button>
-    </form>
-  </div>
-</div>
-
-<div class="inventory js-inventory">
-  <div class="container">
-    <div class="headlineWrap">
-      <h2 class="headline">Current Inventory</h2>
-    </div>
-    <div class="items">
-      <div class="js-itemsRow row"></div>
+  <div class="navigation">
+    <div class="container">
+      <div class="navButton js-navButton navButton-addItem js-navButton-addItem"
+          data-view="addItem">Add an Item</div>
+      <div class="navButton js-navButton navButton-inventory js-navButton-inventory"
+          data-view="inventory">Current Inventory</div>
+      <div class="navButton js-navButton navButton-lists js-navButton-lists"
+          data-view="lists">Show Lists</div>
     </div>
   </div>
-</div>
 
-<div class="lists js-lists">
-  <div class="container">
-    <div class="listsContainer">
-      <h2 class="headline">Grocery Lists</h2>
-      <div class="listRow js-listsRow row"></div>
+  <div class="addItem js-addItem">
+    <div class="container">
+      <form action="" class="form">
+        <h2 class="headline">Add Item</h2>
+        <div class="formGroup">
+          <label class="label" for="itemName">Item Name</label>
+          <input class="textInput js-itemName" type="text" id="itemName">
+        </div>
+
+        <div class="formGroup targetAmountGroup">
+          <label class="label" for="targetAmount">Target Amount</label>
+          <input class="textInput js-targetAmount" type="text" id="targetAmount">
+        </div>
+
+        <div class="formGroup currentAmountGroup">
+          <label class="label" for="currentAmount">Current Amount</label>
+          <input class="textInput js-currentAmount" type="text" id="currentAmount">
+        </div>
+
+        <div class="formGroup unitNameGroup">
+          <label class="label" for="unitName">Unit Name</label>
+          <input class="textInput js-unitName" type="text" id="unitName">
+        </div>
+
+        <div class="formGroup stepValGroup">
+          <label class="label" for="stepVal">Step Value</label>
+          <input class="textInput js-stepVal" type="text" id="stepVal">
+        </div>
+
+        <div class="formGroup">
+          <label class="label" for="location">Location</label>
+          <input class="textInput js-location" type="text" id="location">
+        </div>
+
+        <button class="button js-addItemButton">Submit</button>
+      </form>
     </div>
   </div>
+
+  <div class="inventory js-inventory">
+    <div class="container">
+      <div class="headlineWrap">
+        <h2 class="headline">Current Inventory</h2>
+      </div>
+      <div class="items">
+        <div class="js-itemsRow row"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lists js-lists">
+    <div class="container">
+      <div class="listsContainer">
+        <h2 class="headline">Grocery Lists</h2>
+        <div class="listRow js-listsRow row"></div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
   <script src="js/jquery-3.2.1.js"></script>
