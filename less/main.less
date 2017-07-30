@@ -24,7 +24,7 @@ body {
 .appContainer {
   margin: 0 auto;
   max-width: 414px;
-  height: 100vh;
+  min-height: 100vh;
   background: #ffffff;
 }
 
@@ -311,5 +311,11 @@ INVENTORY PAGE
 
   .amountContainer {
     padding: 0 10px;
+  }
+}
+
+@media (min-width: 415px) {
+  .appContainer {
+    width: 320px;
   }
 }
