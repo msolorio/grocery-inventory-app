@@ -10,7 +10,8 @@ const ItemSchema = mongoose.Schema({
   unitName: String,
   stepVal: Number,
   location: String,
-  image: String
+  image: String,
+  clickVal: Number
 });
 
 const UserSchema = mongoose.Schema({
