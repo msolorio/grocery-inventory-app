@@ -7,8 +7,7 @@
 window.state = {
   currentView: 'inventory',
   username: '',
-  items: [],
-  clickVal: 0
+  items: []
 };
 
 ///////////////////////////////////////////////////////////
@@ -107,7 +106,8 @@ function getItems(username, callback) {
     });
 }
 
-function updateServer(username, itemIndex) {
+function updateItemInServer(username, itemIndex) {
+
   var updateItem = state.items[itemIndex];
   var itemId = updateItem._id;
 
@@ -119,32 +119,33 @@ function updateServer(username, itemIndex) {
     async: true,
     contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
   }
-  console.log('PUT request initiated');
+  console.log('PUT request initiated for: ' + updateItem.itemName);
   $.ajax(settings)
     .done(function(data) {
       state.items[itemIndex] = data.updatedItem;
-      state.clickVal = 0;
+      state.items[itemIndex].clickVal = 0;
       console.log('PUT request completed successfully');
     })
     .fail(function(err) {
       console.log('there was an error updating your item.');
       console.log('error:', err);
-
-      renderItemAmount(itemIndex, (state.items[itemIndex].currentAmount - (stepVal * clickVal)));
+      var originalClickVal = state.items[itemIndex].clickVal;
+      renderItemAmount(itemIndex,
+        (state.items[itemIndex].currentAmount - (stepVal * originalClickVal)));
     });
 }
 
-function decrementItem(itemIndex) {
+function renderItemDecrement(itemIndex) {
   var updateItem = state.items[itemIndex];
   var updatedAmount = state.items[itemIndex].currentAmount -= updateItem.stepVal;
-  state.clickVal--;
+  state.items[itemIndex].clickVal--;
   $('.js-currentAmount-' + itemIndex).html(updatedAmount + ' ');
 }
 
-function incrementItem(itemIndex) {
+function renderItemIncrement(itemIndex) {
   var updateItem = state.items[itemIndex];
   var updatedAmount = state.items[itemIndex].currentAmount += updateItem.stepVal;
-  state.clickVal++;
+  state.items[itemIndex].clickVal++;
   $('.js-currentAmount-' + itemIndex).html(updatedAmount + ' ');
 }
 
@@ -196,6 +197,7 @@ function getNewItemData() {
   newItem.unitName = $('.js-unitName').val();
   newItem.location = $('.js-location').val();
   newItem.image = 'images/salad.svg';
+  newItem.clickVal = 0;
 
   return newItem;
 }
@@ -334,7 +336,7 @@ function checkOffListItem(listItemLocation, listItemNum) {
 
   generateLists(renderLists);
 
-  updateServer(state.username, itemIndex);
+  updateItemInServer(state.username, itemIndex);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -371,26 +373,38 @@ function listenForDeleteClick() {
 }
 
 function listenForDecrementorClick() {
+  var itemIndexes = {};
+
   $('.js-itemsRow').on('click', '.js-decrementor', function(event) {
       var itemIndex = $(event.target).data('cardnum');
-      decrementItem(itemIndex);
+      itemIndexes[itemIndex] = 0;
+      renderItemDecrement(itemIndex);
   });
 
   $('.js-itemsRow').on('click', '.js-decrementor', $.debounce(1000, function(event) {
-      var itemIndex = $(event.target).data('cardnum');
-      updateServer(state.username, itemIndex);
+      console.log('itemIndexes:', itemIndexes);
+      for (var itemIndex in itemIndexes) {
+        updateItemInServer(state.username, itemIndex);
+      }
+      itemIndexes = {};
   }));
 }
 
 function listenForIncrementorClick() {
+  var itemIndexes = {};
+
   $('.js-itemsRow').on('click', '.js-incrementor', function(event) {
     var itemIndex = $(event.target).data('cardnum');
-    incrementItem(itemIndex);
+    itemIndexes[itemIndex] = 0;
+    renderItemIncrement(itemIndex);
   });
 
   $('.js-itemsRow').on('click', '.js-incrementor', $.debounce(1000, function(event) {
-    var itemIndex = $(event.target).data('cardnum');
-    updateServer(state.username, itemIndex);
+    console.log('itemIndexes:', itemIndexes);
+    for (var itemIndex in itemIndexes) {
+      updateItemInServer(state.username, itemIndex);
+    }
+    itemIndexes = {};
   }));
 }
 
