@@ -259,7 +259,8 @@ function generateSingleListMarkup(list) {
   );
   singleListMarkup += list.items.reduce(function(itemsList, item, index) {
     return itemsList += (
-      '<div class="listItem js-listItem" data-listitemnum="' + index + '" data-location="' + list.location + '" data-itemname="' + item.itemName +'">' +
+      '<div class="listItem js-listItem" data-listitemnum="' + index + '" data-location="' + list.location + '" data-itemname="' + item.itemName +'"' +
+        ' data-itemId="' + item._id + '">' +
         '<div class="itemName">' + item.itemName + '</div>' +
         '<img class="checkmark js-checkmark" src="images/checked-button.svg" title="' + item.itemName + '" alt="check ' + item.itemName + '">' +
         '<div class="amountNeeded">' + item.amountNeeded + ' ' + item.unitName + '</div>' +
@@ -301,7 +302,8 @@ function generateLists(renderLists) {
       itemName: item.itemName,
       amountNeeded: (item.targetAmount - item.currentAmount),
       unitName: item.unitName,
-      stepVal: item.stepVal
+      stepVal: item.stepVal,
+      _id: item._id
     }
 
     lists[item.location].items.push(newItem);
@@ -314,16 +316,25 @@ function generateLists(renderLists) {
   renderLists(state.lists);
 }
 
-function checkOffListItem(listItemLocation, listItemNum, itemName) {
+function checkOffListItem(listItemLocation, listItemNum) {
+  console.log('listItemLocation:', listItemLocation);
+  console.log('listItemNum:', listItemNum);
+  var checkedItemId = state.lists[listItemLocation].items[listItemNum]._id;
+  console.log('checkedItemId:', checkedItemId);
+
   state.lists[listItemLocation].items.splice(listItemNum, 1);
 
+  var itemIndex;
   state.items.forEach(function(item, index) {
-    if (item.itemName === itemName) {
+    if (item._id === checkedItemId) {
+      itemIndex = index;
       state.items[index].currentAmount = state.items[index].targetAmount;
     }
   });
 
   generateLists(renderLists);
+
+  updateServer(state.username, itemIndex);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -339,9 +350,9 @@ function listenForListItemClick() {
 
     var listItemNum = $(event.target).data('listitemnum');
     var listItemLocation = $(event.target).data('location');
-    var itemName = $(event.target).data('itemname');
+    // var itemName = $(event.target).data('itemname');
 
-    checkOffListItem(listItemLocation, listItemNum, itemName);
+    checkOffListItem(listItemLocation, listItemNum);
   });
 }
 
