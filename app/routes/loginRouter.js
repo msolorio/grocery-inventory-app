@@ -10,7 +10,9 @@ module.exports = function(app, passport) {
 	// HOMEPAGE ////////////////////////////////////////////////
 	app.get('/', ifLoggedIn, (req, res) => {
 
-		res.sendFile(path.join(__dirname + '/../../views/index.html'));
+    // UNTIL INTRO PAGE IS BUILT REDIRECT TO LOGIN
+    res.redirect('/login');
+		// res.sendFile(path.join(__dirname + '/../../views/index.html'));
 	});
 
 	// LOGIN PAGE //////////////////////////////////////////////
@@ -57,15 +59,6 @@ module.exports = function(app, passport) {
 		})(req, res, next);
 
 	});
-
-	// PROFILE PAGE /////////////////////////////////////////////
-	// checks url params for when route is hit directly
-	// app.get('/users/:username',
-	// 	ifLoggedOut,
-	// 	correctUserRouteParams,
-	// 	(req, res) => {
-	// 		return res.sendFile(path.join(__dirname + '/../../views/profile.html'));	
-	// });
 
 	// LOGOUT ///////////////////////////////////////////////////
 	app.get('/logout', (req, res) => {
