@@ -213,7 +213,7 @@ function clearForm() {
  * pass new item data to renderItem
  * @param {function} callback 
  */
-function addItem(username, callback) {
+function addItem(username, renderItem) {
   var newItem = getNewItemData();
 
   var settings = {
@@ -227,7 +227,8 @@ function addItem(username, callback) {
   $.ajax(settings)
   .done(function(data) {
     state.items.unshift(data.newItem);
-    callback(state.items);
+    renderItems(state.items);
+    renderView('inventory');
   })
   .fail(function(err) {
     console.log('there was an error adding a new item.');
