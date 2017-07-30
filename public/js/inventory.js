@@ -106,6 +106,10 @@ function getItems(username, callback) {
     });
 }
 
+function renderItemAmount(itemIndex, updatedAmount) {
+  $('.js-currentAmount-' + itemIndex).html(updatedAmount + ' ');
+}
+
 function updateItemInServer(username, itemIndex) {
 
   var updateItem = state.items[itemIndex];
@@ -137,14 +141,14 @@ function renderItemDecrement(itemIndex) {
   var updateItem = state.items[itemIndex];
   var updatedAmount = state.items[itemIndex].currentAmount -= updateItem.stepVal;
   state.items[itemIndex].clickVal--;
-  $('.js-currentAmount-' + itemIndex).html(updatedAmount + ' ');
+  renderItemAmount(itemIndex, updatedAmount);
 }
 
 function renderItemIncrement(itemIndex) {
   var updateItem = state.items[itemIndex];
   var updatedAmount = state.items[itemIndex].currentAmount += updateItem.stepVal;
   state.items[itemIndex].clickVal++;
-  $('.js-currentAmount-' + itemIndex).html(updatedAmount + ' ');
+  renderItemAmount(itemIndex, updatedAmount);
 }
 
 function removeItem(username, itemIndex, callback) {
@@ -175,6 +179,14 @@ function parseDecimal(string) {
   return Math.round(parseFloat(string) * 100) / 100;
 }
 
+function makeCapitalCase(string) {
+  var wordsArray = string.split(' ');
+  var capitalCaseWordsArray = wordsArray.map(function(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  });
+  return capitalCaseWordsArray.join(' ');
+}
+
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -187,12 +199,12 @@ function parseDecimal(string) {
 // check content lengths, types, required
 function getNewItemData() {
   var newItem = {};
-  newItem.itemName = $('.js-itemName').val();
-  newItem.targetAmount = parseDecimal($('.js-targetAmount').val());
-  newItem.currentAmount = parseDecimal($('.js-currentAmount').val());
-  newItem.stepVal = parseDecimal($('.js-stepVal').val());
-  newItem.unitName = $('.js-unitName').val();
-  newItem.location = $('.js-location').val();
+  newItem.itemName = makeCapitalCase($('.js-itemName').val() || 'Anonymous Item');
+  newItem.targetAmount = parseDecimal($('.js-targetAmount').val() || 1);
+  newItem.currentAmount = parseDecimal($('.js-currentAmount').val() || newItem.targetAmount || 0);
+  newItem.stepVal = parseDecimal($('.js-stepVal').val() || 1);
+  newItem.unitName = ($('.js-unitName').val() || 'units').toLowerCase();
+  newItem.location = makeCapitalCase($('.js-location').val() || 'general');
   newItem.image = 'images/salad.svg';
   newItem.clickVal = 0;
 
@@ -286,7 +298,7 @@ function renderLists(listsObj) {
 function generateLists(renderLists) {
   
   var listsArray = state.items.reduce(function(lists, item) {
-    if (item.targetAmount - item.currentAmount <= 0) {
+    if (Math.round(item.targetAmount - item.currentAmount) <= 0) {
       return lists;
     }
 
@@ -299,7 +311,7 @@ function generateLists(renderLists) {
 
     var newItem = {
       itemName: item.itemName,
-      amountNeeded: (item.targetAmount - item.currentAmount),
+      amountNeeded: Math.round(item.targetAmount - item.currentAmount),
       unitName: item.unitName,
       stepVal: item.stepVal,
       _id: item._id
@@ -316,7 +328,9 @@ function generateLists(renderLists) {
 }
 
 function checkOffListItem(listItemLocation, listItemNum) {
-  var checkedItemId = state.lists[listItemLocation].items[listItemNum]._id;
+  var listItem = state.lists[listItemLocation].items[listItemNum];
+  var checkedItemId = listItem._id;
+  var amountPurchased = listItem.amountNeeded;
 
   state.lists[listItemLocation].items.splice(listItemNum, 1);
 
@@ -324,7 +338,7 @@ function checkOffListItem(listItemLocation, listItemNum) {
   state.items.forEach(function(item, index) {
     if (item._id === checkedItemId) {
       itemIndex = index;
-      state.items[index].currentAmount = state.items[index].targetAmount;
+      state.items[index].currentAmount += amountPurchased;
     }
   });
 
@@ -346,7 +360,6 @@ function listenForListItemClick() {
 
     var listItemNum = $(event.target).data('listitemnum');
     var listItemLocation = $(event.target).data('location');
-    // var itemName = $(event.target).data('itemname');
 
     checkOffListItem(listItemLocation, listItemNum);
   });
