@@ -119,12 +119,10 @@ function updateItemInServer(username, itemIndex) {
     async: true,
     contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
   }
-  console.log('PUT request initiated for: ' + updateItem.itemName);
   $.ajax(settings)
     .done(function(data) {
       state.items[itemIndex] = data.updatedItem;
       state.items[itemIndex].clickVal = 0;
-      console.log('PUT request completed successfully');
     })
     .fail(function(err) {
       console.log('there was an error updating your item.');
@@ -161,7 +159,6 @@ function removeItem(username, itemIndex, callback) {
 
   $.ajax(settings)
     .done(function(data) {
-      console.log(data);
       state.items = data.items;
       callback(state.items);
     })
@@ -229,7 +226,6 @@ function addItem(username, callback) {
 
   $.ajax(settings)
   .done(function(data) {
-    console.log(data);
     state.items.unshift(data.newItem);
     callback(state.items);
   })
@@ -319,10 +315,7 @@ function generateLists(renderLists) {
 }
 
 function checkOffListItem(listItemLocation, listItemNum) {
-  console.log('listItemLocation:', listItemLocation);
-  console.log('listItemNum:', listItemNum);
   var checkedItemId = state.lists[listItemLocation].items[listItemNum]._id;
-  console.log('checkedItemId:', checkedItemId);
 
   state.lists[listItemLocation].items.splice(listItemNum, 1);
 
@@ -382,7 +375,6 @@ function listenForDecrementorClick() {
   });
 
   $('.js-itemsRow').on('click', '.js-decrementor', $.debounce(1000, function(event) {
-      console.log('itemIndexes:', itemIndexes);
       for (var itemIndex in itemIndexes) {
         updateItemInServer(state.username, itemIndex);
       }
@@ -400,7 +392,6 @@ function listenForIncrementorClick() {
   });
 
   $('.js-itemsRow').on('click', '.js-incrementor', $.debounce(1000, function(event) {
-    console.log('itemIndexes:', itemIndexes);
     for (var itemIndex in itemIndexes) {
       updateItemInServer(state.username, itemIndex);
     }
