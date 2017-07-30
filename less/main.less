@@ -102,6 +102,11 @@ ADD ITEM PAGE
     padding-bottom: 15px; 
   }
 
+  .formInputs {
+    padding-bottom: 15px;
+    .clearfix;
+  }
+
   .formGroup {
     padding-bottom: 7px;
   }
@@ -109,13 +114,14 @@ ADD ITEM PAGE
   .targetAmountGroup,
   .currentAmountGroup,
   .unitNameGroup,
-  .stepValGroup {
+  .stepValGroup,
+  .storeNameGroup {
     width: ~"calc(50% - 8px)";
     float: left;
   }
 
   .targetAmountGroup,
-  .unitNameGroup {
+  .stepValGroup {
     margin-right: 16px;
   }
 
@@ -128,6 +134,7 @@ ADD ITEM PAGE
     display: block;
     width: 100%;
     border: 1px solid #aaa;
+    border-radius: 3px;
     height: 30px;
   }
 
@@ -136,8 +143,9 @@ ADD ITEM PAGE
     background: #aaa;
     border: none;
     min-width: 200px;
-    margin: 15px auto;
+    margin: 0 auto;
     padding: 10px 20px;
+    border-radius: 3px;
   }
 
   .textInput,

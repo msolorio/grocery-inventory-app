@@ -200,8 +200,8 @@ function makeCapitalCase(string) {
 function getNewItemData() {
   var newItem = {};
   newItem.itemName = makeCapitalCase($('.js-itemName').val() || 'Anonymous Item');
-  newItem.targetAmount = parseDecimal($('.js-targetAmount').val() || 1);
-  newItem.currentAmount = parseDecimal($('.js-currentAmount').val() || newItem.targetAmount || 0);
+  newItem.targetAmount = parseDecimal($('.js-targetAmount').val() || 5);
+  newItem.currentAmount = newItem.targetAmount;
   newItem.stepVal = parseDecimal($('.js-stepVal').val() || 1);
   newItem.unitName = ($('.js-unitName').val() || 'units').toLowerCase();
   newItem.location = makeCapitalCase($('.js-location').val() || 'general');
