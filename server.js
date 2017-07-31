@@ -43,13 +43,14 @@ require('./app/routes')(app, passport);
 let server;
 
 function runServer(databaseUrl, port) {
+  console.log('databaseUrl:', databaseUrl);
   return new Promise((resolve, reject) => {
     mongoose.connect(databaseUrl, (err) => {
       if (err) return reject(err);
     });
     server = app.listen(port, () => {
       console.log(`your server running on port: ${port}\n...you better go and catch it.`);
-      return resolve();
+      resolve();
     })
     .on('error', (err) => {
       mongoose.disconnect();

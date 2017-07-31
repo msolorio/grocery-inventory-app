@@ -11,7 +11,7 @@ module.exports = function(app, passport) {
 	app.get('/', ifLoggedIn, (req, res) => {
 
     // UNTIL INTRO PAGE IS BUILT REDIRECT TO LOGIN
-    res.redirect('/login');
+    res.redirect('/');
 		// res.sendFile(path.join(__dirname + '/../../views/index.html'));
 	});
 
