@@ -111,27 +111,28 @@ function renderItemAmount(itemIndex, updatedAmount) {
 }
 
 function updateItemInServer(username, itemIndex) {
-
   var updateItem = state.items[itemIndex];
   var itemId = updateItem._id;
+  state.items[itemIndex].clickVal = 0;
 
   var settings = {
     type: 'PUT',
     url: '/users/' + username + '/items/' + itemId,
-    data: state.items[itemIndex],
+    data: updateItem,
     dataType: 'json',
     async: true,
     contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
-  }
+  };
+
   $.ajax(settings)
     .done(function(data) {
       state.items[itemIndex] = data.updatedItem;
-      state.items[itemIndex].clickVal = 0;
     })
     .fail(function(err) {
       console.log('there was an error updating your item.');
       console.log('error:', err);
-      var originalClickVal = state.items[itemIndex].clickVal;
+      // original click val used to reset current amount on error
+      var originalClickVal = updateItem.clickVal;
       renderItemAmount(itemIndex,
         (state.items[itemIndex].currentAmount - (stepVal * originalClickVal)));
     });
@@ -139,9 +140,11 @@ function updateItemInServer(username, itemIndex) {
 
 function renderItemDecrement(itemIndex) {
   var updateItem = state.items[itemIndex];
-  var updatedAmount = state.items[itemIndex].currentAmount -= updateItem.stepVal;
-  state.items[itemIndex].clickVal--;
-  renderItemAmount(itemIndex, updatedAmount);
+  if (updateItem.currentAmount - updateItem.stepVal >= 0) {
+    var updatedAmount = state.items[itemIndex].currentAmount -= updateItem.stepVal;
+    state.items[itemIndex].clickVal--;
+    renderItemAmount(itemIndex, updatedAmount);
+  }
 }
 
 function renderItemIncrement(itemIndex) {
