@@ -79,7 +79,12 @@ NAVIGATION
     font-size: 0.8rem;
     border-radius: 3px;
     background: #eeeeee;
+    border: 2px solid transparent;
     cursor: pointer;
+    &:focus {
+      outline: none;
+      border: 2px solid #38c9f7;
+    }
   }
 }
 
@@ -108,7 +113,7 @@ ADD ITEM PAGE
   }
 
   .formGroup {
-    padding-bottom: 7px;
+    padding-bottom: 9px;
   }
 
   .targetAmountGroup,
@@ -127,7 +132,8 @@ ADD ITEM PAGE
 
   .label {
     display: block;
-    padding-bottom: 7px;
+    padding-bottom: 9px;
+    font-size: .9rem;
   }
 
   .textInput {

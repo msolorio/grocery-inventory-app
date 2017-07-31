@@ -14,11 +14,11 @@
   <div class="navigation">
     <div class="container">
       <div class="navButton js-navButton navButton-addItem js-navButton-addItem"
-          data-view="addItem">Add an Item</div>
+          data-view="addItem" tabindex="1">Add an Item</div>
       <div class="navButton js-navButton navButton-inventory js-navButton-inventory"
-          data-view="inventory">Current Inventory</div>
+          data-view="inventory" tabindex="2">Current Inventory</div>
       <div class="navButton js-navButton navButton-lists js-navButton-lists"
-          data-view="lists">Show Lists</div>
+          data-view="lists" tabindex="3">Show Lists</div>
     </div>
   </div>
 
@@ -34,7 +34,8 @@
               class="textInput js-itemName"
               type="text"
               id="itemName"
-              maxlength="10">
+              maxlength="15"
+              tabindex="4">
           </div>
 
           <div class="formGroup targetAmountGroup">
@@ -42,16 +43,18 @@
             <input
               class="textInput js-targetAmount"
               id="targetAmount"
-              type="number">
+              type="number"
+              tabindex="5">
           </div>
 
           <div class="formGroup unitNameGroup">
-            <label class="label" for="unitName">Unit Name</label>
+            <label class="label" for="unitName">Unit Name (plural)</label>
             <input
               class="textInput js-unitName"
               type="text"
               id="unitName"
-              maxlength="10">
+              maxlength="10"
+              tabindex="6">
           </div>
 
           <div class="formGroup stepValGroup">
@@ -59,16 +62,21 @@
             <input
               class="textInput js-stepVal"
               id="stepVal"
-              type="number">
+              type="number"
+              tabindex="7">
           </div>
 
           <div class="formGroup storeNameGroup">
             <label class="label" for="location">Location</label>
-            <input class="textInput js-location" type="text" id="location">
+            <input
+              class="textInput js-location"
+              type="text"
+              id="location"
+              tabindex="8">
           </div>
         </div>
 
-        <button class="button js-addItemButton">Submit</button>
+        <button class="button js-addItemButton" tabindex="9">Submit</button>
       </form>
     </div>
   </div>
