@@ -240,6 +240,7 @@ function addItem(username, renderItem) {
   .done(function(data) {
     state.items.unshift(data.newItem);
     renderItems(state.items);
+    clearForm();
     renderView('inventory');
   })
   .fail(function(err) {
@@ -263,6 +264,21 @@ function listenForAddItem() {
 ///////////////////////////////////////////////////////////
 // LISTS SCREEN
 ///////////////////////////////////////////////////////////
+function lastLetterIsS(name) {
+  return (name.charAt(name.length-1).toLowerCase()) === 's';
+}
+
+function oneUnitNeeded(amountNeeded) {
+  return amountNeeded === 1;
+}
+
+function getUnitNameForm(name, amountNeeded) {
+  if (oneUnitNeeded(amountNeeded) && lastLetterIsS(name)) {
+    return name.slice(0, name.length-1);
+  }
+  return name;
+}
+
 function generateSingleListMarkup(list) {
   var singleListMarkup = (
     '<div class="col singleList">' +
@@ -274,7 +290,7 @@ function generateSingleListMarkup(list) {
         ' data-itemId="' + item._id + '">' +
         '<div class="itemName">' + item.itemName + '</div>' +
         '<div class="cross js-remove" data-listitemnum="' + index + '" data-location="' + list.location + '">&#10799;</div>' +
-        '<div class="amountNeeded">' + item.amountNeeded + ' ' + item.unitName + '</div>' +
+        '<div class="amountNeeded">' + item.amountNeeded + ' ' + getUnitNameForm(item.unitName, item.amountNeeded) + '</div>' +
       '</div>'
     );
   }, '');
@@ -365,6 +381,15 @@ function listenForListItemClick() {
   });
 }
 
+function listenForNavButtonEnterPress() {
+  $('.js-navButton').keypress(function(event) {
+    if (event.keyCode == 13) {
+      var viewClicked = $(event.target).data('view');
+      renderView(viewClicked);
+    }
+  });
+}
+
 function listenForNavButtonClick() {
   $('.js-navButton').click(function(event) {
     var viewClicked = $(event.target).data('view');
@@ -426,6 +451,7 @@ $(function() {
   // getItems(state.username, renderItems);
   renderView('inventory');
   listenForNavButtonClick();
+  listenForNavButtonEnterPress();
   listenForAddItem();
   listenForDecrementorClick();
   listenForIncrementorClick();
