@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Inventory</title>
+  <title>Grocery Inventory App</title>
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -24,28 +24,42 @@
 
   <div class="addItem js-addItem">
     <div class="container">
-      <form action="" class="form">
+      <form action="" class="form" data-parsley-validate>
         <h2 class="headline">Add Item</h2>
         
         <div class="formInputs">
           <div class="formGroup">
             <label class="label" for="itemName">Item Name</label>
-            <input class="textInput js-itemName" type="text" id="itemName">
+            <input
+              class="textInput js-itemName"
+              type="text"
+              id="itemName"
+              maxlength="10">
           </div>
 
           <div class="formGroup targetAmountGroup">
             <label class="label" for="targetAmount">Target Amount</label>
-            <input class="textInput js-targetAmount" type="text" id="targetAmount">
+            <input
+              class="textInput js-targetAmount"
+              id="targetAmount"
+              type="number">
           </div>
 
           <div class="formGroup unitNameGroup">
             <label class="label" for="unitName">Unit Name</label>
-            <input class="textInput js-unitName" type="text" id="unitName">
+            <input
+              class="textInput js-unitName"
+              type="text"
+              id="unitName"
+              maxlength="10">
           </div>
 
           <div class="formGroup stepValGroup">
             <label class="label" for="stepVal">Step Value</label>
-            <input class="textInput js-stepVal" type="text" id="stepVal">
+            <input
+              class="textInput js-stepVal"
+              id="stepVal"
+              type="number">
           </div>
 
           <div class="formGroup storeNameGroup">
@@ -80,6 +94,7 @@
   </div>
 
 </div>
+
 
   <script src="js/jquery-3.2.1.js"></script>
   <script src="js/debounce.js"></script>

@@ -32,7 +32,7 @@
     "start": "node server.js",
     "start:dev": "./node_modules/.bin/nodemon server.js",
     "less": "./node_modules/.bin/lessc less/main.less public/css/main.css",
-    "less:watch": "less-watch-compiler less public/css"
+    "less:watch": "less-watch-compiler less public/css main.less"
   },
   "author": "",
   "license": "ISC"
