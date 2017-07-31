@@ -292,8 +292,10 @@ function generateSingleListMarkup(list) {
       '<div class="listItem js-listItem" data-itemname="' + item.itemName +'"' +
         ' data-itemId="' + item._id + '">' +
         '<div class="itemName">' + item.itemName + '</div>' +
-        '<div class="cross js-remove" data-listitemnum="' + index + '" data-location="' + list.location + '">&#10799;</div>' +
-        '<div class="amountNeeded">' + item.amountNeeded + ' ' + getUnitNameForm(item.unitName, item.amountNeeded) + '</div>' +
+        '<div class="removeItem js-remove" data-listitemnum="' + index + '" data-location="' + list.location + '">' +
+          '<div class="cross">&#10799;</div>' +
+          '<div class="amountNeeded">' + item.amountNeeded + ' ' + getUnitNameForm(item.unitName, item.amountNeeded) + '</div>' +
+        '</div>' +
       '</div>'
     );
   }, '');
