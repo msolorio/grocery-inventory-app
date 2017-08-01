@@ -1,0 +1,30 @@
+[
+  {
+    "items" : [
+      {
+        "itemName" : "Dates",
+        "targetAmount" : 2,
+        "currentAmount" : 1.75,
+        "stepVal" : 0.25,
+        "unitName" : "bins",
+        "location" : "Costco",
+        "image" : "images/salad.svg",
+        "clickVal" : 0
+      },
+      {
+        "itemName" : "Leaves",
+        "targetAmount" : 2,
+        "currentAmount" : 2.5,
+        "stepVal" : 0.25,
+        "unitName" : "bins",
+        "location" : "Costco",
+        "image" : "images/salad.svg",
+        "clickVal" : 0
+      }
+    ],
+    "local" : {
+      "password" : "$2a$08$2aLtGWXYy4UktdWaHYdwGuHYAg3mOliojWmJqJzhPP1xLsVVQQu6q",
+      "username" : "funuser"
+    }
+  }
+]
