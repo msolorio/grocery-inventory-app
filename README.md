@@ -13,7 +13,7 @@ How is this useful? If you purchase most of your food at a grocery store, you kn
 - Server Side Application: Node, Express, ES6, Mongoose, MongoDB, EJS
 - Authentication: Passport, Bcrypt
 - Front End: JavaScript, jQuery, jQuery Debounce, Less, HTML
-- Testing: Mocha, Chai
+- Testing: Mocha, Chai, Supertest
 - DevOps: Travis CI/CD, Heroku
 
 ## EXPERIENCE MAP
