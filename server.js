@@ -59,18 +59,19 @@ function runServer(databaseUrl, port) {
     })
     .on('error', (err) => {
       mongoose.disconnect();
-      reject(err);
+      return reject(err);
     });
   });
 }
 
 function closeServer() {
-  return new Promise((resolve, reject) => {
-    console.log(`closing server`);
-    server.close((err) => {
-      if (err) return reject(err);
-
-      resolve();
+  return mongoose.disconnect().then(() => {
+    return new Promise((resolve, reject) => {
+      console.log(`closing server`);
+      server.close((err) => {
+        if (err) return reject(err);
+        resolve();
+      });
     });
   });
 }
