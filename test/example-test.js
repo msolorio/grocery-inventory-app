@@ -2,6 +2,7 @@ require('dotenv').config();
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
+const expect = chai.expect;
 const mongoose = require('mongoose');
 const request = require('supertest');
 const server = request.agent(`http://localhost:${process.env.PORT}`);
@@ -96,7 +97,7 @@ describe('after signing up', function(done) {
       .send({
         "itemName": "Mango Juice",
         "targetAmount": 10,
-        "currentAmount": 5,
+        "currentAmount": 10,
         "unitName": "jugs",
         "stepVal": 1,
         "location": "Mango Farm"
@@ -114,14 +115,103 @@ describe('after signing up', function(done) {
             .end(function(err, res) {
               if (err) return done(err);
               else {
-                console.log('res.body:', res.body);
                 res.body.items.should.have.lengthOf(1);
+                // check if all properties exists
+                // after setting default values server side
                 done();
               }
             });
+        }
+      });
 
-          // check if all properties exists
-          // after setting default values server side
+  });
+
+  it('a user should be able to decrement an item in their inventory', function(done) {
+
+    server
+      .post('/users/testuser/items')
+      .send({
+        "itemName": "Mango Juice",
+        "targetAmount": 10,
+        "currentAmount": 10,
+        "unitName": "jugs",
+        "stepVal": 1,
+        "location": "Mango Farm"
+      })
+      .expect(201)
+      .end(function(err, res) {
+        if (err) return done(err);
+        else {
+          // console.log('res.body:', res.body);
+          const itemId = res.body.newItem._id;
+          // console.log('itemId:', itemId);
+          res.body.newItem.should.have.property('_id');
+          res.body.newItem.currentAmount.should.equal(10);
+          
+          server
+            .put(`/users/testuser/items/${itemId}`)
+            .send({
+              "itemName": "Mango Juice",
+              "targetAmount": 10,
+              "currentAmount": 9,
+              "unitName": "jugs",
+              "stepVal": 1,
+              "location": "Mango Farm",
+              "_id": itemId
+            })
+            .expect(200)
+            .end(function(err, res) {
+              if (err) return done(err);
+              else {
+                res.body.updatedItem.currentAmount.should.equal(9);
+                done();
+              }
+            });
+        }
+      });
+  });
+
+  it('a user should be able to remove an item from their inventory', function(done) {
+
+    server
+      .post('/users/testuser/items')
+      .send({
+        "itemName": "Mango Juice",
+        "targetAmount": 10,
+        "currentAmount": 10,
+        "unitName": "jugs",
+        "stepVal": 1,
+        "location": "Mango Farm"
+      })
+      .expect(201)
+      .end(function(err, res) {
+        if (err) return done(err);
+        else {
+          const itemId = res.body.newItem._id;
+          res.body.should.have.property('newItem');
+          res.body.newItem.should.be.a('object');
+          res.body.newItem.should.have.property('_id');
+
+          server
+            .get('/users/testuser/items')
+            .end(function(err, res) {
+              if (err) return done(err);
+              else {
+                res.body.items.should.have.lengthOf(1);
+
+                server
+                  .delete(`/users/testuser/items/${itemId}`)
+                  .expect(200)
+                  .end(function(err, res) {
+                    if (err) return done(err);
+                    else {
+                      res.body.items.should.have.lengthOf(0);
+                      expect(res.body.items[itemId]).to.equal(undefined);
+                      done();
+                    }
+                  })
+              }
+            });
         }
       });
 
@@ -132,7 +222,10 @@ describe('after signing up', function(done) {
 describe('without being logged in', function() {
 
   before(function() {
-    return runServer(process.env.TEST_DATABASE_URL, process.env.PORT);
+    return runServer(process.env.TEST_DATABASE_URL, process.env.PORT)
+      .catch((err) => {
+        console.log('err:', err);
+      });
   });
 
   beforeEach(function() {

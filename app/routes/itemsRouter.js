@@ -46,8 +46,10 @@ router.post('/', (req, res) => {
 
 router.put('/:itemid', (req, res) => {
 
-	const updateItem = req.body;
-	// validate if req.body.id matches req.params.id
+  const updateItem = req.body;
+  
+  // TODO:
+	// validate if req.body.id matches req.params.id //////////////////////////
 
 	User
 		.findOneAndUpdate(
