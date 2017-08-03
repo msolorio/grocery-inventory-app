@@ -1,13 +1,135 @@
+require('dotenv').config();
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
-require('dotenv').config();
+const mongoose = require('mongoose');
+const request = require('supertest');
+const server = request.agent(`http://localhost:${process.env.PORT}`);
 
 chai.use(chaiHttp);
 
 const { app, runServer, closeServer } = require('../server');
 
-describe('grocery inventory API resource:', function() {
+function callDoneOnServerRes(done) {
+  return function(err, res) {
+    if (err) return done(err);
+    else {
+      console.log('user signed up');
+      return done();
+    }
+  }
+}
+
+function signUpUser(done) {
+  server
+    .post('/signup')
+    .send({username: 'testuser', password: '1111'})
+    .expect(302)
+    .expect('Location', '/users/testuser')
+    .end(callDoneOnServerRes(done));
+}
+
+
+function tearDownDb() {
+  console.log('tearing down DB');
+  return mongoose.connection.dropDatabase();
+}
+
+
+describe('after signing up', function(done) {
+
+  before(function() {
+    return runServer(process.env.TEST_DATABASE_URL, process.env.PORT);
+  });
+
+  beforeEach(function(done) {
+    return signUpUser(done);
+  });
+
+  afterEach(function() {
+    return tearDownDb();
+  });
+
+  after(function() {
+    return closeServer();
+  });
+
+  it('a user is able to login', function(done) {
+    server
+      .post('/login')
+      .send({username: 'testuser', password: '1111'})
+      .expect(302)
+      .expect('Location', '/users/testuser')
+      .end(callDoneOnServerRes(done));
+  });
+
+  it('a user is able to logout', function(done) {
+    server
+      .get('/logout')
+      .expect(302)
+      .expect('Location', '/')
+      .end(callDoneOnServerRes(done));
+  });
+
+
+  it('a user is able to acces their items', function(done) {
+    server
+      .get('/users/testuser/items')
+      .expect(200)
+      .end(onResponse);
+
+      function onResponse(err, res) {
+        if (err) return done(err);
+        else {
+          res.body.should.have.property('items');
+          res.body.items.should.be.a('array');
+          res.body.items.should.have.lengthOf(0);
+          return done();
+        }
+      }
+  });
+
+  it('a user should be able to add an item to their inventory', function(done) {
+    
+    server
+      .post('/users/testuser/items')
+      .send({
+        "itemName": "Mango Juice",
+        "targetAmount": 10,
+        "currentAmount": 5,
+        "unitName": "jugs",
+        "stepVal": 1,
+        "location": "Mango Farm"
+      })
+      .expect(201)
+      .end(function(err, res) {
+        if (err) return done(err);
+        else {
+          res.body.should.have.property('newItem');
+          res.body.newItem.should.be.a('object');
+          res.body.newItem.should.have.property('_id');
+
+          server
+            .get('/users/testuser/items')
+            .end(function(err, res) {
+              if (err) return done(err);
+              else {
+                console.log('res.body:', res.body);
+                res.body.items.should.have.lengthOf(1);
+                done();
+              }
+            });
+
+          // check if all properties exists
+          // after setting default values server side
+        }
+      });
+
+  });
+
+});
+
+describe('without being logged in', function() {
 
   before(function() {
     return runServer(process.env.TEST_DATABASE_URL, process.env.PORT);
@@ -23,16 +145,23 @@ describe('grocery inventory API resource:', function() {
     return closeServer();
   });
 
-  // describe('GET to /', function() {
+  it('user can access signup page', function() {
+    return chai.request(app)
+      .get('/signup')
+      .then(function(res) {
+        res.should.be.html;
+        res.should.have.status(200);
+      });
+  });
 
-  //   it('should return HTML', function() {
-  //     return chai.request(app)
-  //       .get('/')
-  //       .then(function(res) {
-  //         res.should.have.status(200);
-  //         res.should.be.html;
-  //       });
-  //   });
-
-  // });
+  
+  it('user can access login page', function() {
+    return chai.request(app)
+      .get('/login')
+      .then(function(res) {
+        res.should.be.html;
+        res.should.have.status(200);
+      });
+  });
+  
 });
