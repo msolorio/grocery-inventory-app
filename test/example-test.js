@@ -1,38 +1,96 @@
+require('dotenv').config();
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
-require('dotenv').config();
+const mongoose = require('mongoose');
+const request = require('supertest');
+const server = request.agent(`http://localhost:${process.env.PORT}`);
 
 chai.use(chaiHttp);
 
 const { app, runServer, closeServer } = require('../server');
 
-describe('grocery inventory API resource:', function() {
+function signUpUser(done) {
+  server
+    .post('/signup')
+    .send({username: 'testuser', password: '1111'})
+    .expect(302)
+    .expect('Location', '/users/testuser')
+    .end(onResponse);
+
+  function onResponse(err, res) {
+    if (err) return done(err);
+    else {
+      console.log('user signed up');
+      return done();
+    }
+  } 
+}
+
+
+function tearDownDb() {
+  console.log('tearing down DB');
+  return mongoose.connection.dropDatabase();
+}
+
+
+describe('after signing up', function(done) {
 
   before(function() {
     return runServer(process.env.TEST_DATABASE_URL, process.env.PORT);
   });
 
-  beforeEach(function() {
+  beforeEach(function(done) {
+    return signUpUser(done);
   });
 
   afterEach(function() {
+    return tearDownDb();
   });
 
   after(function() {
     return closeServer();
   });
 
-  // describe('GET to /', function() {
+  it('a user is able to login', function(done) {
+    server
+      .post('/login')
+      .send({username: 'testuser', password: '1111'})
+      .expect(302)
+      .expect('Location', '/users/testuser')
+      .end(onResponse);
 
-  //   it('should return HTML', function() {
-  //     return chai.request(app)
-  //       .get('/')
-  //       .then(function(res) {
-  //         res.should.have.status(200);
-  //         res.should.be.html;
-  //       });
-  //   });
+      function onResponse(err, res) {
+        if (err) return done(err);
+        else {
+          console.log('user signed up');
+          return done();
+        }
+      } 
+  });
 
-  // });
+  it('a user is able to logout', function(done) {
+    server
+      .get('/logout')
+      .expect(302)
+      .expect('Location', '/')
+      .end(onResponse);
+
+      function onResponse(err, res) {
+        if (err) return done(err);
+        else {
+          console.log('user signed up');
+          return done();
+        }
+      } 
+  });
+
 });
+
+// describe('without being logged in', function() {
+
+//   it('user can access signup page', function(done) {
+
+//   })
+  
+// });
