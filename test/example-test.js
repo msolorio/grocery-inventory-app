@@ -89,7 +89,43 @@ describe('after signing up', function(done) {
       }
   });
 
-  
+  it('a user should be able to add an item to their inventory', function(done) {
+    
+    server
+      .post('/users/testuser/items')
+      .send({
+        "itemName": "Mango Juice",
+        "targetAmount": 10,
+        "currentAmount": 5,
+        "unitName": "jugs",
+        "stepVal": 1,
+        "location": "Mango Farm"
+      })
+      .expect(201)
+      .end(function(err, res) {
+        if (err) return done(err);
+        else {
+          res.body.should.have.property('newItem');
+          res.body.newItem.should.be.a('object');
+          res.body.newItem.should.have.property('_id');
+
+          server
+            .get('/users/testuser/items')
+            .end(function(err, res) {
+              if (err) return done(err);
+              else {
+                console.log('res.body:', res.body);
+                res.body.items.should.have.lengthOf(1);
+                done();
+              }
+            });
+
+          // check if all properties exists
+          // after setting default values server side
+        }
+      });
+
+  });
 
 });
 
