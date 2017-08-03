@@ -3,7 +3,7 @@ const { User, Item } = require('../models/user');
 const router = express.Router({mergeParams: true});
 
 router.get('/', (req, res) => {
-
+  
 	User
 		.findById(req.user.id)
 		.exec()
