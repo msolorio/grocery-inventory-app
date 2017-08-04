@@ -100,6 +100,7 @@ describe('after signing up', function(done) {
         "currentAmount": 10,
         "unitName": "jugs",
         "stepVal": 1,
+        "clickVal": 0,
         "location": "Mango Farm"
       })
       .expect(201)
@@ -136,6 +137,7 @@ describe('after signing up', function(done) {
         "currentAmount": 10,
         "unitName": "jugs",
         "stepVal": 1,
+        "clickVal": 0,
         "location": "Mango Farm"
       })
       .expect(201)
@@ -156,6 +158,7 @@ describe('after signing up', function(done) {
               "currentAmount": 9,
               "unitName": "jugs",
               "stepVal": 1,
+              "clickVal": 0,
               "location": "Mango Farm",
               "_id": itemId
             })
@@ -181,6 +184,7 @@ describe('after signing up', function(done) {
         "currentAmount": 10,
         "unitName": "jugs",
         "stepVal": 1,
+        "clickVal": 0,
         "location": "Mango Farm"
       })
       .expect(201)

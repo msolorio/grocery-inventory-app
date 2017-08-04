@@ -4,20 +4,19 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 
 const ItemSchema = mongoose.Schema({
-  itemName: String,
-  targetAmount: Number,
-  currentAmount: Number,
-  unitName: String,
-  stepVal: Number,
-  location: String,
-  image: String,
-  clickVal: Number
+  itemName: {type: String, required: true},
+  targetAmount: {type: Number, required: true},
+  currentAmount: {type: Number, required: true},
+  unitName: {type: String, required: true},
+  stepVal: {type: Number, required: true},
+  location: {type: String, required: true},
+  clickVal: {type: Number, required: true}
 });
 
 const UserSchema = mongoose.Schema({
 	local: {
-		username: String,
-  	password: String,
+		username: {type: String, required: true},
+  	password: {type: String, required: true}
 	},
   items: [ItemSchema]
 });

@@ -1,7 +1,51 @@
+//////////////////////////////////////////////////////////////////////
+// SETUP
+//////////////////////////////////////////////////////////////////////
 const express = require('express');
 const { User, Item } = require('../models/user');
 const router = express.Router({mergeParams: true});
 
+//////////////////////////////////////////////////////////////////////
+// MIDDLEWARE
+//////////////////////////////////////////////////////////////////////
+function routeParamMatchesBody(req, res, next) {
+
+  if (!(req.body._id && req.params.itemid && req.body._id === req.params.itemid)) {
+    const message = 'item id in request params does not match id from request body';
+
+    console.error('error:', message);
+    return res.status(400).json({message: message});
+  }
+  next();
+}
+
+
+function requiredFieldsExist(req, res, next) {
+  const itemPassedIn = req.body;
+
+  const requiredFields = [
+    'itemName',
+    'targetAmount',
+    'currentAmount',
+    'unitName',
+    'stepVal',
+    'location',
+    'clickVal',
+  ];
+
+  for (let i=0, j=requiredFields.length; i<j; i++) {
+    let field = requiredFields[i];
+    if (itemPassedIn[field] === undefined) {
+      return res.status(400).json({message: `missing required field: ${field}`});
+    }
+  }
+
+  next();
+}
+
+//////////////////////////////////////////////////////////////////////
+// ROUTE HANDLERS
+//////////////////////////////////////////////////////////////////////
 router.get('/', (req, res) => {
   
 	User
@@ -17,10 +61,10 @@ router.get('/', (req, res) => {
 
 });
 
-router.post('/', (req, res) => {
 
-	// TODO: validation on post body
-	const newItem = req.body;
+router.post('/', requiredFieldsExist, (req, res) => {
+  
+  const newItem = req.body;
 
 	User
 		.findById(req.user.id)
@@ -44,12 +88,9 @@ router.post('/', (req, res) => {
 
 });
 
-router.put('/:itemid', (req, res) => {
+router.put('/:itemid', routeParamMatchesBody, requiredFieldsExist, (req, res) => {
 
   const updateItem = req.body;
-  
-  // TODO:
-	// validate if req.body.id matches req.params.id //////////////////////////
 
 	User
 		.findOneAndUpdate(
