@@ -10,16 +10,25 @@
 <body>
 
 <div class="appContainer">
-
   <div class="navigation">
-    <div class="container">
-      <div class="navButton js-navButton navButton-addItem js-navButton-addItem"
-          data-view="addItem" tabindex="1">Add an Item</div>
-      <div class="navButton js-navButton navButton-inventory js-navButton-inventory"
-          data-view="inventory" tabindex="2">Current Inventory</div>
-      <div class="navButton js-navButton navButton-lists js-navButton-lists"
-          data-view="lists" tabindex="3">Show Lists</div>
+    
+    <div class="account">
+      <div class="username"><%= username %>'s Groceries</div>
+      <div class="logoutButton">Logout</div>
     </div>
+
+    <div class="navButtons">
+      <div class="navButton js-navButton navButton-addItem js-navButton-addItem"
+           data-view="addItem"
+           tabindex="1">Add an Item</div>
+      <div class="navButton js-navButton navButton-inventory js-navButton-inventory"
+           data-view="inventory"
+           tabindex="2">Current Inventory</div>
+      <div class="navButton js-navButton navButton-lists js-navButton-lists"
+           data-view="lists"
+           tabindex="3">Show Lists</div>
+    </div>
+
   </div>
 
   <div class="addItem js-addItem">

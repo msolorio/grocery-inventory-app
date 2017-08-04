@@ -69,9 +69,37 @@ UTILITY CLASSES
 NAVIGATION
 /************************************************/
 .navigation {
-  padding: 10px 0;
+  padding: 10px 10px;
   background: #999999;
-  text-align: center;
+
+  .account {
+    padding: 0 0 10px;
+    .clearfix;
+  }
+
+  .username {
+    float: left;
+  }
+
+  .logoutButton {
+    float: right;
+    padding: 3px 10px;
+    margin: 0 3px;
+    font-size: 0.8rem;
+    border-radius: 3px;
+    background: #eeeeee;
+    border: 2px solid transparent;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+      border: 2px solid #38c9f7;
+    }
+  }
+
+  .navButtons {
+    text-align: center;
+  }
+
   .navButton {
     display: inline-block;
     padding: 10px;
