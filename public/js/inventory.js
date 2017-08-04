@@ -443,6 +443,31 @@ function listenForIncrementorClick() {
   }));
 }
 
+function logoutUser() {
+  console.log('in logoutUser');
+  var settings = {
+    type: 'GET',
+    url: '/logout'
+    // dataType: 'json'
+  }
+
+  $.ajax(settings)
+  .done(function(data) {
+    console.log('data:', data);
+    
+  })
+  .fail(function(err) {
+    console.log('there was an error logging out.');
+    console.log('error:', err);
+  });
+}
+
+function listenForLogoutClick() {
+  $('.js-logoutButton').click(function(event) {
+    logoutUser();
+  });
+}
+
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -462,6 +487,7 @@ $(function() {
   listenForIncrementorClick();
   listenForDeleteClick();
   listenForListItemClick();
+  listenForLogoutClick();
 });
 
 }());
