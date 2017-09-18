@@ -28,6 +28,8 @@ app.use(cookieParser());
 app.use(bodyParser());
 
 app.use('/users', express.static('public'));
+app.use('/login', express.static('public'));
+app.use('/signup', express.static('public'));
 
 app.set('view engine', 'ejs');
 

@@ -88,7 +88,7 @@ function renderItems(items) {
 /**
  * Makes request to retrieve user's items
  * Calls a callback sending in retrieved data
- * @param {function} renderItems 
+ * @param {function} renderItems
  */
 function getItems(username, callback) {
   var settings = {
@@ -228,7 +228,7 @@ function clearForm() {
 /**
  * makes POST request to send new item data
  * pass new item data to renderItem
- * @param {function} callback 
+ * @param {function} callback
  */
 function addItem(username, renderItem) {
   var newItem = getNewItemData();
@@ -252,7 +252,7 @@ function addItem(username, renderItem) {
     console.log('there was an error adding a new item.');
     console.log('error:', err);
   });
-  
+
 }
 
 ///////////////////////////////////////////////////////////
@@ -312,7 +312,7 @@ function renderLists(listsObj) {
 }
 
 function generateLists(renderLists) {
-  
+
   var listsArray = state.items.reduce(function(lists, item) {
     if (Math.round(item.targetAmount - item.currentAmount) <= 0) {
       return lists;
@@ -457,8 +457,8 @@ function logoutUser() {
 
   $.ajax(settings)
   .done(function(data) {
-    console.log('data:', data);
-    
+    // console.log('data:', data);
+
   })
   .fail(function(err) {
     console.log('there was an error logging out.');
