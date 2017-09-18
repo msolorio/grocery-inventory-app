@@ -34,7 +34,8 @@ module.exports = function(passport) {
 	// PROFILE PAGE /////////////////////////////////////////////
 	router.get('/:username', correctUserRouteParams, (req, res) => {
 		console.log('hit /users/:username');
-		return res.sendFile(path.join(__dirname + '/../../views/profile.html'));	
+    // return res.sendFile(path.join(__dirname + '/../../views/profile.html'));
+    return res.render('profile.ejs', { username: req.user.local.username});	
 	});
 
 	return router;

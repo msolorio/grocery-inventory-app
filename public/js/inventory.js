@@ -32,6 +32,8 @@ function renderView(viewToShow) {
         break;
     }
 
+    state.currentView = viewToShow;
+
     $('.js-' + viewToShow).css('display', 'block');
 }
 
@@ -253,13 +255,6 @@ function addItem(username, renderItem) {
   
 }
 
-function listenForAddItem() {
-  $('.js-addItemButton').click(function(event) {
-    event.preventDefault();
-    addItem(state.username, renderItems);
-  });
-}
-
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -375,6 +370,15 @@ function checkOffListItem(listItemLocation, listItemNum) {
 ///////////////////////////////////////////////////////////////////////////
 // EVENT LISTENERS
 ///////////////////////////////////////////////////////////////////////////
+function listenForAddItem() {
+  $('.js-addItemButton').click(function(event) {
+    event.preventDefault();
+    if (state.currentView === 'addItem') {
+      addItem(state.username, renderItems);
+    }
+  });
+}
+
 function listenForListItemClick() {
   $('.js-listsRow').on('click', '.js-remove', function(event) {
       event.target = this;
@@ -443,6 +447,31 @@ function listenForIncrementorClick() {
   }));
 }
 
+function logoutUser() {
+  console.log('in logoutUser');
+  var settings = {
+    type: 'GET',
+    url: '/logout'
+    // dataType: 'json'
+  }
+
+  $.ajax(settings)
+  .done(function(data) {
+    console.log('data:', data);
+    
+  })
+  .fail(function(err) {
+    console.log('there was an error logging out.');
+    console.log('error:', err);
+  });
+}
+
+function listenForLogoutClick() {
+  $('.js-logoutButton').click(function(event) {
+    logoutUser();
+  });
+}
+
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -462,6 +491,7 @@ $(function() {
   listenForIncrementorClick();
   listenForDeleteClick();
   listenForListItemClick();
+  listenForLogoutClick();
 });
 
 }());

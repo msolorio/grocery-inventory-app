@@ -69,9 +69,43 @@ UTILITY CLASSES
 NAVIGATION
 /************************************************/
 .navigation {
-  padding: 10px 0;
+  padding: 10px 10px;
   background: #999999;
-  text-align: center;
+
+  .account {
+    padding: 0 0 10px;
+    .clearfix;
+  }
+
+  .username {
+    float: left;
+    margin-left: 4px;
+  }
+
+  .logoutButton {
+    float: right;
+    margin: 0 3px;
+  }
+
+  .logoutButtonLink {
+    display: block;
+    padding: 3px 10px;
+    font-size: 0.8rem;
+    border-radius: 3px;
+    text-decoration: none;
+    background: #eeeeee;
+    border: 2px solid transparent;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+      border: 2px solid #38c9f7;
+    }
+  }
+
+  .navButtons {
+    text-align: center;
+  }
+
   .navButton {
     display: inline-block;
     padding: 10px;
@@ -168,7 +202,7 @@ ADD ITEM PAGE
 INVENTORY PAGE
 /************************************************/
 .inventory {
-  // padding-bottom: 20px;
+
   .headlineWrap {
     margin: 10px 0;
     background: #eeeeee;
@@ -271,6 +305,7 @@ INVENTORY PAGE
 .lists {
   display: none; // removes FOUC
   padding: 10px 0;
+  
   .listsContainer {
     min-height: 87vh;
     padding: 15px;
@@ -279,8 +314,9 @@ INVENTORY PAGE
   }
 
   .headline {
-    text-align: center;
+    padding-bottom: 10px;
     margin: 0;
+    text-align: center;
   }
 
   .location {

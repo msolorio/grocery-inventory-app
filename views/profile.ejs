@@ -10,16 +10,29 @@
 <body>
 
 <div class="appContainer">
-
   <div class="navigation">
-    <div class="container">
-      <div class="navButton js-navButton navButton-addItem js-navButton-addItem"
-          data-view="addItem" tabindex="1">Add an Item</div>
-      <div class="navButton js-navButton navButton-inventory js-navButton-inventory"
-          data-view="inventory" tabindex="2">Current Inventory</div>
-      <div class="navButton js-navButton navButton-lists js-navButton-lists"
-          data-view="lists" tabindex="3">Show Lists</div>
+    
+    <div class="account">
+      <div class="username"><%= username %>'s groceries</div>
+      <div class="logoutButton js-logoutButton">
+        <a class="logoutButtonLink"
+           href="/logout"
+           tabindex="1">Logout</a>
+      </div>
     </div>
+
+    <div class="navButtons">
+      <div class="navButton js-navButton navButton-addItem js-navButton-addItem"
+           data-view="addItem"
+           tabindex="2">Add an Item</div>
+      <div class="navButton js-navButton navButton-inventory js-navButton-inventory"
+           data-view="inventory"
+           tabindex="3">Current Inventory</div>
+      <div class="navButton js-navButton navButton-lists js-navButton-lists"
+           data-view="lists"
+           tabindex="4">Show Lists</div>
+    </div>
+
   </div>
 
   <div class="addItem js-addItem">
@@ -35,7 +48,7 @@
               type="text"
               id="itemName"
               maxlength="15"
-              tabindex="4">
+              tabindex="5">
           </div>
 
           <div class="formGroup targetAmountGroup">
@@ -44,7 +57,7 @@
               class="textInput js-targetAmount"
               id="targetAmount"
               type="number"
-              tabindex="5">
+              tabindex="6">
           </div>
 
           <div class="formGroup unitNameGroup">
@@ -54,7 +67,7 @@
               type="text"
               id="unitName"
               maxlength="10"
-              tabindex="6">
+              tabindex="7">
           </div>
 
           <div class="formGroup stepValGroup">
@@ -63,7 +76,7 @@
               class="textInput js-stepVal"
               id="stepVal"
               type="number"
-              tabindex="7">
+              tabindex="8">
           </div>
 
           <div class="formGroup storeNameGroup">
@@ -72,11 +85,11 @@
               class="textInput js-location"
               type="text"
               id="location"
-              tabindex="8">
+              tabindex="9">
           </div>
         </div>
 
-        <button class="button js-addItemButton" tabindex="9">Submit</button>
+        <button class="button js-addItemButton" tabindex="10">Submit</button>
       </form>
     </div>
   </div>
