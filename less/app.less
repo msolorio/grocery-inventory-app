@@ -100,6 +100,10 @@ NAVIGATION
       outline: none;
       border: 2px solid #38c9f7;
     }
+    &:visited,
+    &:active {
+      color: #000;
+    }
   }
 
   .navButtons {
@@ -167,12 +171,14 @@ ADD ITEM PAGE
   .label {
     display: block;
     padding-bottom: 9px;
-    font-size: .9rem;
+    font-size: 1.1rem;
   }
 
   .textInput {
     display: block;
     width: 100%;
+    padding-left: 8px;
+    font-size: 1.2rem;
     border: 1px solid #aaa;
     border-radius: 3px;
     height: 30px;
@@ -326,7 +332,8 @@ INVENTORY PAGE
 
   .listItem {
     border-bottom: 1px solid #bbb;
-    margin-bottom: 7px;
+    margin-bottom: 9px;
+    padding-bottom: 9px;
     .clearfix;
   }
 
@@ -337,7 +344,6 @@ INVENTORY PAGE
 
   .removeItem {
     float: right;
-    padding: 7px 9px;
     cursor: pointer;
     .clearfix;
   }
