@@ -1,18 +1,19 @@
 'use strict';
 
-// const flash = require('connect-flash');
 const path = require('path');
 
 const usersRouter = require('./usersRouter');
 
 module.exports = function(app, passport) {
 
+  // INTRO PAGE //////////////////////////////////////////////
+  app.get('/intro', (req, res) => {
+    res.sendFile(path.join(__dirname + '/../../views/index.html'));
+  });
+
 	// HOMEPAGE ////////////////////////////////////////////////
 	app.get('/', ifLoggedIn, (req, res) => {
-
-    // UNTIL INTRO PAGE IS BUILT REDIRECT TO LOGIN
     res.redirect('/login');
-		// res.sendFile(path.join(__dirname + '/../../views/index.html'));
 	});
 
 	// LOGIN PAGE //////////////////////////////////////////////
@@ -27,7 +28,7 @@ module.exports = function(app, passport) {
 			if (err) return next(err);
 
 			if (!user) return res.redirect('/login');
-			
+
 			// req.login establishes a session
 			req.login(user, (loginErr) => {
 				if (loginErr) return next(loginErr);
@@ -69,7 +70,7 @@ module.exports = function(app, passport) {
 
 function ifLoggedIn(req, res, next) {
 	if (req.isAuthenticated()) {
-		return res.redirect(`/users/${req.user.local.username}`);	
+		return res.redirect(`/users/${req.user.local.username}`);
 	}
 	next();
 }

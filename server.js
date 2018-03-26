@@ -27,6 +27,7 @@ app.use(morgan('common'));
 app.use(cookieParser());
 app.use(bodyParser());
 
+app.use('/', express.static('public'));
 app.use('/users', express.static('public'));
 app.use('/login', express.static('public'));
 app.use('/signup', express.static('public'));
