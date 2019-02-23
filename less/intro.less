@@ -1,0 +1,151 @@
+.introPage {
+  font-family: arial,sans-serif;
+  color: #222;
+  background: #eeeeee;
+
+  .container {
+    margin: 0 auto;
+    max-width: 750px;
+    padding: 0 20px;
+  }
+
+  .link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .header {
+    padding: 20px 50px;
+    background: #381403;
+    border-bottom: 2px solid #1b0000;
+  }
+
+  .headerContent {
+    text-align: center;
+    margin: 0;
+    font-size: 24px;
+    color: #fff;
+  }
+
+  .hero {
+    background: url('../images/fruit-basket.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #170000;
+  }
+
+  .hero_overlay {
+    padding: 20px;
+    width: 100%;
+    background: rgba(25, 11, 0, 0.75);
+  }
+
+  .hero_paragraph,
+  .paragraph {
+    font-size: 21px;
+    line-height: 23px;
+    letter-spacing: .05rem;
+    margin: 0;
+  }
+
+  .hero_paragraph {
+    color: #fff;
+  }
+
+  .paragraph {
+    margin: 0 0 25px;
+    color: #222;
+  }
+
+  .section {
+    padding: 20px 0;
+  }
+
+  .mainContent {
+    padding-bottom: 20px;
+  }
+
+  .heading {
+    font-size: 24px;
+    margin: 0 0 15px;
+  }
+
+  .button {
+    display: block;
+    padding: 0;
+    margin: 0 auto 20px;
+    width: 219px;
+    height: 61px;
+    text-align: center;
+    cursor: pointer;
+    color: #fff;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.4);
+    background: #777;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.46);
+    outline: none;
+    text-decoration: none;
+  }
+
+  .button_link {
+    display: block;
+    height: 100%;
+    padding: 20px 12px;
+    font-size: 17px;
+  }
+
+  .button_getStarted {
+    background: #a72a00;
+  }
+
+  .button_viewSource {
+    background: #65666c;
+  }
+
+  .footer {
+    height: 50px;
+    background: #222;
+    border-top: 1px solid #170000;;
+  }
+
+  @media (min-width: 768px) {
+    .headerContent {
+      text-align: left;
+      font-size: 30px;
+    }
+
+    .hero,
+    .hero_overlay {
+      height: 100vh;
+    }
+
+    .hero_overlay {
+      padding: 50px;
+      background: rgba(25, 11, 0, 0.29);
+    }
+
+    .hero_paragraph {
+      font-size: 33px;
+      line-height: 36px;
+      letter-spacing: .05rem;
+      width: 45%;
+    }
+
+    .paragraph {
+      text-align: center;
+    }
+
+    .heading {
+      font-size: 30px;
+      margin: 0 0 25px;
+      text-align: center;
+    }
+
+    .section {
+      padding: 42px 0 30px;
+    }
+  }
+}
