@@ -33,6 +33,7 @@ function requiredFieldsExist(req, res, next) {
     'clickVal',
   ];
 
+  // TODO: update to iterator method
   for (let i=0, j=requiredFields.length; i<j; i++) {
     let field = requiredFields[i];
     if (itemPassedIn[field] === undefined) {
