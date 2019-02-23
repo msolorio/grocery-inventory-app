@@ -11,7 +11,7 @@ module.exports = function(app, passport) {
     res.sendFile(path.join(__dirname + '/../../views/index.html'));
   });
 
-	// HOMEPAGE ////////////////////////////////////////////////
+	// ROOT ////////////////////////////////////////////////
 	app.get('/', ifLoggedIn, (req, res) => {
     res.redirect('/intro');
 	});
