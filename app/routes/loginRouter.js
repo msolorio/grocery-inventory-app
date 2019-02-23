@@ -13,7 +13,7 @@ module.exports = function(app, passport) {
 
 	// HOMEPAGE ////////////////////////////////////////////////
 	app.get('/', ifLoggedIn, (req, res) => {
-    res.redirect('/login');
+    res.redirect('/intro');
 	});
 
 	// LOGIN PAGE //////////////////////////////////////////////
